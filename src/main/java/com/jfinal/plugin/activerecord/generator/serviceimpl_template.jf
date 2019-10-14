@@ -1,0 +1,16 @@
+package #(serviceImplPackageName);
+
+import #(modelPackageName).#(tableMeta.modelName);
+import #(serviceImport);
+import com.ambow.service.support.base.service.impl.BaseServiceImpl;
+import org.springframework.stereotype.Service;
+
+@Service
+public class #(serviceImplName) extends BaseServiceImpl<#(tableMeta.modelName)> implements #(serviceName) {
+
+    @Override
+    public #(tableMeta.modelName) getDao() {
+        return #(tableMeta.modelName).dao;
+    }
+
+}

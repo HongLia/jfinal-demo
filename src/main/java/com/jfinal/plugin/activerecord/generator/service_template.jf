@@ -1,0 +1,8 @@
+package #(servicePackageName);
+
+import #(modelPackageName).#(tableMeta.modelName);
+import com.ambow.service.support.base.service.IBaseService;
+
+public interface I#(tableMeta.modelName)Service extends IBaseService<#(tableMeta.modelName)> {
+
+}

@@ -227,6 +227,8 @@ public class MetaBuilder {
 			TableMeta tableMeta = new TableMeta();
 			tableMeta.name = tableName;
 			tableMeta.remarks = rs.getString("REMARKS");
+			//tableMeta.remarks = rs.getString("Comment");
+
 			
 			tableMeta.modelName = buildModelName(tableName);
 			tableMeta.baseModelName = buildBaseModelName(tableMeta.modelName);

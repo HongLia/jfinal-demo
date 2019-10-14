@@ -35,6 +35,8 @@ public class Generator {
 	protected Dialect dialect = null;
 	protected MetaBuilder metaBuilder;
 	protected BaseModelGenerator baseModelGenerator;
+
+	protected AmbowGenerator ambowGenerator;
 	protected ModelGenerator modelGenerator;
 	protected MappingKitGenerator mappingKitGenerator;
 	protected DataDictionaryGenerator dataDictionaryGenerator;
@@ -48,8 +50,10 @@ public class Generator {
 	 * @param modelPackageName model 包名
 	 * @param modelOutputDir model 输出目录
 	 */
-	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir, String modelPackageName, String modelOutputDir) {
-		this(dataSource, new BaseModelGenerator(baseModelPackageName, baseModelOutputDir), new ModelGenerator(modelPackageName, baseModelPackageName, modelOutputDir));
+	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir, String modelPackageName, String modelOutputDir,String controllerPackageName,String ambowDir,String resourceDir) {
+		this(dataSource, new BaseModelGenerator(baseModelPackageName, baseModelOutputDir), new ModelGenerator(modelPackageName, baseModelPackageName, modelOutputDir),
+				new AmbowGenerator(controllerPackageName,ambowDir,resourceDir)
+		);
 	}
 	
 	/**
@@ -81,7 +85,7 @@ public class Generator {
 	 * 使用指定 BaseModelGenerator、ModelGenerator 构造 Generator 
 	 * 生成 BaseModel、Model、MappingKit 三类文件，其中 MappingKit 输出目录与包名与 Model相同
 	 */
-	public Generator(DataSource dataSource, BaseModelGenerator baseModelGenerator, ModelGenerator modelGenerator) {
+	public Generator(DataSource dataSource, BaseModelGenerator baseModelGenerator, ModelGenerator modelGenerator,AmbowGenerator ambowGenerator) {
 		if (dataSource == null) {
 			throw new IllegalArgumentException("dataSource can not be null.");
 		}
@@ -94,6 +98,7 @@ public class Generator {
 		
 		this.metaBuilder = new MetaBuilder(dataSource);
 		this.baseModelGenerator = baseModelGenerator;
+		this.ambowGenerator = ambowGenerator;
 		this.modelGenerator = modelGenerator;
 		this.mappingKitGenerator = new MappingKitGenerator(modelGenerator.modelPackageName, modelGenerator.modelOutputDir);
 		this.dataDictionaryGenerator = new DataDictionaryGenerator(dataSource, modelGenerator.modelOutputDir);
@@ -274,17 +279,20 @@ public class Generator {
 			System.out.println("TableMeta 数量为 0，不生成任何文件");
 			return ;
 		}
-		
+
 		baseModelGenerator.generate(tableMetas);
-		
+
+		//生成controller service serviceimpl
+		ambowGenerator.generate(tableMetas,this.modelGenerator.modelPackageName);
+
 		if (modelGenerator != null) {
 			modelGenerator.generate(tableMetas);
 		}
-		
+//
 		if (mappingKitGenerator != null) {
 			mappingKitGenerator.generate(tableMetas);
 		}
-		
+//
 		if (dataDictionaryGenerator != null && generateDataDictionary) {
 			dataDictionaryGenerator.generate(tableMetas);
 		}

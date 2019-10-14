@@ -1,0 +1,29 @@
+#[[#namespace("]]##(tableMeta.modelName)")
+    #[[#define ]]#culumns#(abbreviationUp)()
+    #for(cm : tableMeta.columnMetas)
+    	#(abbreviationLow).#(cm.name)#if(!for.last),#end
+    #end
+    #[[#end]]#
+
+    #[[#define ]]#cond#(abbreviationUp)()
+    #for(cm : tableMeta.columnMetas)
+    #set(argName = javaKeyword.contains(cm.attrName) ? '_' + cm.attrName : cm.attrName)
+    #if (cm.remarks.contains('[like]'))
+        #[[#if(]]##(argName))
+            and #(abbreviationLow).#(cm.name) like concat('%',#[[#para(]]##(argName)),'%')
+        #[[#end]]#
+    #else
+        #[[#if(]]##(argName))
+            and #(abbreviationLow).#(cm.name) = #[[#para(]]##(argName))
+        #[[#end]]#
+    #end
+    #end
+    #[[#end]]#
+
+    #[[#sql("list")]]#
+      SELECT #[[#@culumns]]##(abbreviationUp)()
+      from #(tableMeta.name) #(abbreviationLow) where 1 = 1
+      #[[#@cond]]##(abbreviationUp)()
+      order by #(abbreviationLow).#(tableMeta.primaryKey) desc
+    #[[#end]]#
+#[[#end]]#
