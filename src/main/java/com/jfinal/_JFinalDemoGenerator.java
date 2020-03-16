@@ -7,7 +7,9 @@ import com.jfinal.plugin.druid.DruidPlugin;
 
 import javax.sql.DataSource;
 
-
+/**
+ * 代码生成demo
+ */
 public class _JFinalDemoGenerator {
 
 	private static final String url = "jdbc:mysql://10.10.113.65:3306/app_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false";
@@ -42,7 +44,7 @@ public class _JFinalDemoGenerator {
 		String resourceDir = PathKit.getWebRootPath() + "/src/main/resources/template/gen";
 		
 		// 创建生成器
-		Generator generator = new Generator(getDataSource(), baseModelPackageName, baseModelOutputDir, modelPackageName, modelOutputDir,genPackageName,genOupputDir,resourceDir);
+		Generator generator = new Generator(getDataSource(), baseModelPackageName, baseModelOutputDir, modelPackageName, modelOutputDir,genPackageName,genOupputDir,resourceDir,true,true);
 
 		// 配置是否生成备注
 		generator.setGenerateRemarks(true);

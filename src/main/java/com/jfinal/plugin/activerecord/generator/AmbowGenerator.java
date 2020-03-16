@@ -54,6 +54,9 @@ public class AmbowGenerator {
 
 	protected JavaKeyword javaKeyword = JavaKeyword.me;
 
+	protected boolean generateController = true;
+	protected boolean generateService = true;
+
 	/**
 	 * 针对 Model 中七种可以自动转换类型的 getter 方法，调用其具有确定类型返回值的 getter 方法
 	 * 享用自动类型转换的便利性，例如 getInt(String)、getStr(String)
@@ -90,6 +93,28 @@ public class AmbowGenerator {
 		this.resourceDir = resourceDir;
 		initEngine();
 	}
+
+	public AmbowGenerator(String basePackageName, String baseOutputDir,String resourceDir,boolean generateController,boolean generateService) {
+		if (StrKit.isBlank(basePackageName)) {
+			throw new IllegalArgumentException("baseModelPackageName can not be blank.");
+		}
+		if (basePackageName.contains("/") || basePackageName.contains("\\")) {
+			throw new IllegalArgumentException("baseModelPackageName error : " + basePackageName);
+		}
+		if (StrKit.isBlank(baseOutputDir)) {
+			throw new IllegalArgumentException("baseModelOutputDir can not be blank.");
+		}
+		this.controllerPackageName = basePackageName + "." + "controller";
+		this.servicePackageName = basePackageName + "." + "service";
+		this.serviceImplPackageName = basePackageName + "." + "service.impl";
+		this.controllerOutputDir = baseOutputDir + "/controller";
+		this.serviceOutputDir = baseOutputDir + "/service";
+		this.serviceImplOutputDir = baseOutputDir + "/service/impl";
+		this.resourceDir = resourceDir;
+		this.generateController = generateController;
+		this.generateService = generateService;
+		initEngine();
+	}
 	
 	protected void initEngine() {
 		engine = new Engine();
@@ -107,21 +132,27 @@ public class AmbowGenerator {
 	public void generate(List<TableMeta> tableMetas,String modelPackageName) {
 		System.out.println("Generate base model ...");
 		this.modelPackageName = modelPackageName;
-		for (TableMeta tableMeta : tableMetas) {
-			genControllerContent(tableMeta);
+
+		if(generateController){
+			for (TableMeta tableMeta : tableMetas) {
+				genControllerContent(tableMeta);
+			}
+			writeToFileNotRep(tableMetas,controllerOutputDir,"","Controller");
 		}
-		writeToFile(tableMetas,controllerOutputDir,"","Controller");
+
+		if(generateService){
+			for (TableMeta tableMeta : tableMetas) {
+				genServiceContent(tableMeta);
+			}
+			writeToFileNotRep(tableMetas,serviceOutputDir,"I","Service");
+
+			for (TableMeta tableMeta : tableMetas) {
+				genServiceImplContent(tableMeta);
+			}
+			writeToFileNotRep(tableMetas,serviceImplOutputDir,"","ServiceImpl");
+		}
 
 
-		for (TableMeta tableMeta : tableMetas) {
-			genServiceContent(tableMeta);
-		}
-		writeToFile(tableMetas,serviceOutputDir,"I","Service");
-
-		for (TableMeta tableMeta : tableMetas) {
-			genServiceImplContent(tableMeta);
-		}
-		writeToFile(tableMetas,serviceImplOutputDir,"","ServiceImpl");
 
 		for (TableMeta tableMeta : tableMetas) {
 			genSqlContent(tableMeta);
@@ -216,6 +247,50 @@ public class AmbowGenerator {
 			}
 		}
 	}
-	
+
+	/**
+	 *
+	 * @param tableMetas
+	 * @param outputDir
+	 * @param prefix
+	 * @param subfix
+	 */
+	protected void writeToFileNotRep(List<TableMeta> tableMetas,String outputDir,String prefix,String subfix) {
+		try {
+			for (TableMeta tableMeta : tableMetas) {
+				writeToFileNotRep(tableMeta,outputDir,prefix,subfix);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 若文件存在，则不生成，以免覆盖用户手写的代码
+	 */
+	protected void writeToFileNotRep(TableMeta tableMeta,String outputDir,String prefix,String subfix) throws IOException {
+		File dir = new File(outputDir);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+
+		String target = outputDir + File.separator + prefix + tableMeta.modelName + subfix + ".java";
+
+		File file = new File(target);
+		if (file.exists()) {
+			return ;
+		}
+
+		OutputStreamWriter osw = null;
+		try {
+			osw = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+			osw.write(tableMeta.baseModelContent);
+		}
+		finally {
+			if (osw != null) {
+				osw.close();
+			}
+		}
+	}
 
 }

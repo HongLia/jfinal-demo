@@ -41,6 +41,7 @@ public class Generator {
 	protected MappingKitGenerator mappingKitGenerator;
 	protected DataDictionaryGenerator dataDictionaryGenerator;
 	protected boolean generateDataDictionary = false;
+
 	
 	/**
 	 * 构造 Generator，生成 BaseModel、Model、MappingKit 三类文件，其中 MappingKit 输出目录与包名与 Model相同
@@ -50,9 +51,10 @@ public class Generator {
 	 * @param modelPackageName model 包名
 	 * @param modelOutputDir model 输出目录
 	 */
-	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir, String modelPackageName, String modelOutputDir,String controllerPackageName,String ambowDir,String resourceDir) {
+	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir, String modelPackageName, String modelOutputDir,String controllerPackageName,String ambowDir,String resourceDir,
+					 boolean generateControll,boolean generateServic) {
 		this(dataSource, new BaseModelGenerator(baseModelPackageName, baseModelOutputDir), new ModelGenerator(modelPackageName, baseModelPackageName, modelOutputDir),
-				new AmbowGenerator(controllerPackageName,ambowDir,resourceDir)
+				new AmbowGenerator(controllerPackageName,ambowDir,resourceDir,generateControll,generateServic)
 		);
 	}
 	
@@ -283,6 +285,8 @@ public class Generator {
 		baseModelGenerator.generate(tableMetas);
 
 		//生成controller service serviceimpl
+
+
 		ambowGenerator.generate(tableMetas,this.modelGenerator.modelPackageName);
 
 		if (modelGenerator != null) {

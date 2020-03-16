@@ -16,6 +16,8 @@
 
 package com.jfinal.plugin.activerecord;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,6 +90,7 @@ public class Record implements Serializable {
 	 * Set columns value with Record.
 	 * @param record the Record object
 	 */
+	@JsonIgnore
 	public Record setColumns(Record record) {
 		getColumns().putAll(record.getColumns());
 		return this;
@@ -97,6 +100,7 @@ public class Record implements Serializable {
 	 * Set columns value with Model object.
 	 * @param model the Model object
 	 */
+	@JsonIgnore
 	public Record setColumns(Model<?> model) {
 		getColumns().putAll(model._getAttrs());
 		return this;
