@@ -1,0 +1,48 @@
+package #(baseModelPackageName);
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import com.yixiekeji.core.page.PageInfoExt
+
+/**
+ * <p>
+ * #(tableMeta.remarks)
+ * </p>
+ *
+ * @author #(tableMeta.author)
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+@Table(name = "#(tableMeta.name)")
+@ApiModel(value="#(tableMeta.remarks)DTO对象", description="#(tableMeta.remarks)")
+public class #(tableMeta.modelName)DTO extends PageInfoExt {
+
+    private static final long serialVersionUID = 1L;
+
+
+#for(cm : tableMeta.columnMetas)
+
+    #if(tableMeta.primaryKey == argName)
+    @Id
+    #end
+    #if (cm.remarks)
+    @ApiModelProperty("#(cm.remarks)")
+    #else
+    @ApiModelProperty("#(cm.attrName)")
+    #end
+    @TableField("#(cm.name)")
+    private #(cm.javaType) #(cm.attrName);
+
+#end
+
+}

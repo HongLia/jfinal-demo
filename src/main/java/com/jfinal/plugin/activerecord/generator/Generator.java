@@ -42,6 +42,9 @@ public class Generator {
 	protected DataDictionaryGenerator dataDictionaryGenerator;
 	protected boolean generateDataDictionary = false;
 
+	private String author;
+
+	private String apiPrefix;
 	
 	/**
 	 * 构造 Generator，生成 BaseModel、Model、MappingKit 三类文件，其中 MappingKit 输出目录与包名与 Model相同
@@ -157,7 +160,7 @@ public class Generator {
 	/**
 	 * 设置用于生成 BaseModel 的模板文件，模板引擎将在 class path 与 jar 包内寻找模板文件
 	 * 
-	 * 默认模板为："/com/jfinal/plugin/activerecord/generator/base_model_template.jf"
+	 * 默认模板为："/com/jfinal/plugin/activerecord/generator/jf_model.jf"
 	 */
 	public void setBaseModelTemplate(String baseModelTemplate) {
 		baseModelGenerator.setTemplate(baseModelTemplate);
@@ -269,14 +272,23 @@ public class Generator {
 			dataDictionaryGenerator.setDataDictionaryFileName(dataDictionaryFileName);
 		}
 	}
-	
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	public void generate() {
 		if (dialect != null) {
 			metaBuilder.setDialect(dialect);
 		}
 		
 		long start = System.currentTimeMillis();
-		List<TableMeta> tableMetas = metaBuilder.build();
+		List<TableMeta> tableMetas = metaBuilder.build(this.getAuthor(), this.getApiPrefix());
+
 		if (tableMetas.size() == 0) {
 			System.out.println("TableMeta 数量为 0，不生成任何文件");
 			return ;
@@ -287,15 +299,15 @@ public class Generator {
 		//生成controller service serviceimpl
 
 
-		ambowGenerator.generate(tableMetas,this.modelGenerator.modelPackageName);
+		ambowGenerator.generate(tableMetas,this.baseModelGenerator.baseModelPackageName);
 
-		if (modelGenerator != null) {
-			modelGenerator.generate(tableMetas);
-		}
+//		if (modelGenerator != null) {
+//			modelGenerator.generate(tableMetas);
+//		}
 //
-		if (mappingKitGenerator != null) {
-			mappingKitGenerator.generate(tableMetas);
-		}
+//		if (mappingKitGenerator != null) {
+//			mappingKitGenerator.generate(tableMetas);
+//		}
 //
 		if (dataDictionaryGenerator != null && generateDataDictionary) {
 			dataDictionaryGenerator.generate(tableMetas);
@@ -303,6 +315,14 @@ public class Generator {
 		
 		long usedTime = (System.currentTimeMillis() - start) / 1000;
 		System.out.println("Generate complete in " + usedTime + " seconds.");
+	}
+
+	public String getApiPrefix() {
+		return apiPrefix;
+	}
+
+	public void setApiPrefix(String apiPrefix) {
+		this.apiPrefix = apiPrefix;
 	}
 }
 

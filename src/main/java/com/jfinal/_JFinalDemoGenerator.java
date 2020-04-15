@@ -12,9 +12,13 @@ import javax.sql.DataSource;
  */
 public class _JFinalDemoGenerator {
 
-	private static final String url = "jdbc:mysql://10.10.113.65:3306/app_admin?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false";
-	private static final String user = "root";
-	private static final String pwd = "123.abc";
+	private static final String url = "jdbc:mysql://mysql:3306/ambow_student?serverTimezone=GMT%2B8&useSSL=false";
+	private static final String user = "ambow_student";
+	private static final String pwd = "GnGfHnbLKEnk6doG";
+	private static final boolean controller = true;
+	private static final boolean service = true;
+	private static final String author = "ghy";
+	private static final String apiPrefix = "/api/v2";
 
 	public static DataSource getDataSource() {
 		DruidPlugin druidPlugin = new DruidPlugin(url, user, pwd);
@@ -26,15 +30,15 @@ public class _JFinalDemoGenerator {
 	}
 	
 	public static void main(String[] args) {
-		// base model 所使用的包名
-		String baseModelPackageName = "com.ambow.service.gen.model.base";
-		// base model 文件保存路径
-		String baseModelOutputDir = PathKit.getWebRootPath() + "/src/main/java/com/ambow/service/gen/model/base";
+		// model 所使用的包名
+		String modelPackage = "com.ambow.student.entity";
 
-		// controller所使用的包名
-		String genPackageName = "com.ambow.servicegen";
-		// controller文件保存路径
-		String genOupputDir = PathKit.getWebRootPath() + "/src/main/java/com/ambow/service/gen";
+		String genPackageName = "com.ambow.student";
+
+		// model 文件保存路径
+		String baseModelOutputDir = PathKit.getWebRootPath() + "/src/main/java/com/ambow/student/entity";
+
+		String genOupputDir = PathKit.getWebRootPath() + "/src/main/java/com/ambow/student";
 		
 		// model 所使用的包名 (MappingKit 默认使用的包名)
 		String modelPackageName = "com.ambow.service.gen.model";
@@ -44,10 +48,14 @@ public class _JFinalDemoGenerator {
 		String resourceDir = PathKit.getWebRootPath() + "/src/main/resources/template/gen";
 		
 		// 创建生成器
-		Generator generator = new Generator(getDataSource(), baseModelPackageName, baseModelOutputDir, modelPackageName, modelOutputDir,genPackageName,genOupputDir,resourceDir,true,true);
+		Generator generator = new Generator(getDataSource(), modelPackage, baseModelOutputDir, modelPackageName, modelOutputDir,genPackageName,genOupputDir,resourceDir, controller, service);
 
 		// 配置是否生成备注
 		generator.setGenerateRemarks(true);
+
+		generator.setAuthor(author);
+
+		generator.setApiPrefix(apiPrefix);
 		
 		// 设置数据库方言
 		generator.setDialect(new MysqlDialect());

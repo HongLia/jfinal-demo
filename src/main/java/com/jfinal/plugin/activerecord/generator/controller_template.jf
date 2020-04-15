@@ -1,66 +1,83 @@
 package #(controllerPackageName);
 
-import com.ambow.common.response.ResponseResult;
-import com.jfinal.plugin.activerecord.Page;
+import #(modelPackageName).#(tableMeta.modelName)DTO;
+import #(serviceImport);
+import com.yixiekeji.core.response.AppStatus;
+import com.yixiekeji.core.response.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import #(modelPackageName).#(tableMeta.modelName);
-import #(serviceImport);
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
-
+/**
+ * #(tableMeta.remarks)控制层
+ *
+ * @author #(tableMeta.author)
+ */
+@Api(tags = "#(tableMeta.remarks)表")
 @RestController
-@Api(tags = "#(tableMeta.remarks.trim())")
-@RequestMapping("/#(firstCharToLowerCase(tableMeta.modelName))")
+@RequestMapping("#(tableMeta.modelName)")
 public class #(tableMeta.modelName)Controller {
-    #set(serverImplName = firstCharToLowerCase(tableMeta.modelName) + 'Service')
-    private static final Logger logger = LoggerFactory.getLogger(#(tableMeta.modelName)Controller.class);
 
+    #set(serverImplName = firstCharToLowerCase(tableMeta.modelName) + 'Service')
+	private static final Logger logger = LoggerFactory.getLogger(#(tableMeta.modelName)Controller.class);
+
+    /**
+     * 服务对象
+     */
     @Autowired
     private #(serviceName) #(serverImplName);
 
+    @ResponseBody
     @RequestMapping(value = "page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询", httpMethod = "POST")
-    public ResponseResult page(@RequestBody #(tableMeta.modelName) entity) {
-        Page<#(tableMeta.modelName)> page = #(serverImplName).page(entity);
-        return ResponseResult.success(page.getList(),page.getTotalRow());
+    public Result page(@RequestBody #(tableMeta.modelName)DTO entity) {
+        return #(serverImplName).show(entity, entity.getPageSize(), entity.getCurrentPage());
     }
 
+    @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.POST)
     @ApiOperation(value = "列表查询", httpMethod = "POST")
-    public ResponseResult list(@RequestBody #(tableMeta.modelName) entity) {
-        return ResponseResult.success(#(serverImplName).list(entity));
+    public Result list(@RequestBody #(tableMeta.modelName)DTO entity) {
+        return Result.success(#(serverImplName).select(entity));
     }
 
-    @RequestMapping(value = "getById", method = RequestMethod.GET)
-    @ApiOperation(value = "通过id查询", httpMethod = "GET")
-    public ResponseResult getById(@RequestParam("id") Integer id) {
-        return ResponseResult.success(#(serverImplName).getById(id));
+    @ResponseBody
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @ApiOperation(value = "根据id查询详细信息", httpMethod = "GET")
+    public Result queryById(@PathVariable("id") Integer id) {
+        return Result.success(#(serverImplName).selectByPrimaryKey(id));
     }
 
+    @ResponseBody
     @RequestMapping(value = "add", method = RequestMethod.POST)
-    @ApiOperation(value = "新增", httpMethod = "POST")
-    public ResponseResult add(@RequestBody #(tableMeta.modelName) entity) {
-        return ResponseResult.success(#(serverImplName).add(entity));
+    @ApiOperation(value = "新增数据", httpMethod = "POST")
+    public Result add(@RequestBody #(tableMeta.modelName)DTO entity) {
+        entity.setCreateTime(LocalDateTime.now());
+        #(serverImplName).insertSelective(entity);
+        return Result.success();
     }
 
+    @ResponseBody
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    @ApiOperation(value = "修改", httpMethod = "POST")
-    public ResponseResult update(@RequestBody #(tableMeta.modelName) entity) {
-        if(null == entity.get#(firstCharToUpperCase(toCamelCase(tableMeta.primaryKey)))() || 0 == entity.get#(firstCharToUpperCase(toCamelCase(tableMeta.primaryKey)))())
-            return ResponseResult.paramsError("Id不能为空");
-        return ResponseResult.success(#(serverImplName).update(entity));
+    @ApiOperation(value = "修改数据", httpMethod = "POST")
+    public Result update(@RequestBody #(tableMeta.modelName)DTO entity) {
+        entity.setUpdateTime(LocalDateTime.now());
+        #(serverImplName).updateByPrimaryKeySelective(entity);
+        return Result.success();
     }
 
+    @ResponseBody
     @RequestMapping(value = "delete", method = RequestMethod.GET)
-    @ApiOperation(value = "删除(物理删除，逻辑删除调用update 设置isDel = 1)", httpMethod = "GET")
-    public ResponseResult delete(@RequestParam("id") Integer id) {
-        if(null == id || 0 == id)
-            return ResponseResult.paramsError("Id不能为空");
-        return ResponseResult.success(#(serverImplName).delete(new #(tableMeta.modelName)().set#(firstCharToUpperCase(toCamelCase(tableMeta.primaryKey)))(id)));
+    @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")
+    public Result delete(@RequestParam(value = "ids", required = true) String ids) {
+        #(serverImplName).deleteByIds(ids);
+        return Result.success();
     }
 
 }

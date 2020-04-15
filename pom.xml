@@ -3,13 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<groupId>com.jfinal</groupId>
-	<artifactId>jfinal-ghy</artifactId>
-	<version>4.6</version>
+	<artifactId>jfinal-saas</artifactId>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	
-	<name>JFinal-ghy</name>
-	<description>JFinal-ghy</description>
-	<url>http://www.jfinal.com</url>
+	<name>JFinal-saas</name>
+	<description>JFinal-saas</description>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,9 +18,8 @@
 	<developers>
 		<developer>
 			<id>jfinal</id>
-			<name>James</name>
-			<email>jfinal@126.com</email>
-			<url>http://jfinal.com/user/1</url>
+			<name>haoyue</name>
+			<email>jing072500@126.com</email>
 		</developer>
 	</developers>
 	
@@ -32,26 +30,40 @@
 	</scm>
 
 	<distributionManagement>
+
 		<snapshotRepository>
-			<id>SNAPSHOT</id>
-			<url>http://docs.ambow.com:8081/repository/maven-snapshots</url>
+			<id>nexus-snapshots</id>
+			<url>http://repo.ambow.com/repository/maven-snapshots/</url>
 		</snapshotRepository>
+
 		<repository>
-			<id>RELEASE</id>
-			<url>http://docs.ambow.com:8081/repository/maven-releases</url>
+			<id>nexus-releases</id>
+			<url>http://repo.ambow.com/repository/maven-snapshots/</url>
 		</repository>
+
 	</distributionManagement>
 
-	<repositories>
-		<repository>
-			<id>mtoliv</id>
-			<name>mtoliv</name>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<url>http://docs.ambow.com:8081/repository/maven-public</url>
-		</repository>
-	</repositories>
+	<!--<distributionManagement>-->
+		<!--<snapshotRepository>-->
+			<!--<id>SNAPSHOT</id>-->
+			<!--<url>http://docs.ambow.com:8081/repository/maven-snapshots</url>-->
+		<!--</snapshotRepository>-->
+		<!--<repository>-->
+			<!--<id>RELEASE</id>-->
+			<!--<url>http://docs.ambow.com:8081/repository/maven-releases</url>-->
+		<!--</repository>-->
+	<!--</distributionManagement>-->
+
+	<!--<repositories>-->
+		<!--<repository>-->
+			<!--<id>mtoliv</id>-->
+			<!--<name>mtoliv</name>-->
+			<!--<snapshots>-->
+				<!--<enabled>true</enabled>-->
+			<!--</snapshots>-->
+			<!--<url>http://docs.ambow.com:8081/repository/maven-public</url>-->
+		<!--</repository>-->
+	<!--</repositories>-->
 	<!--
 		所有 dependency 都仅仅是可选项，仅当实际用到第三方时才需要引入
 		注意在 copy 引入下面的依赖时，要去掉 <scope>compile</scope> 才能生效

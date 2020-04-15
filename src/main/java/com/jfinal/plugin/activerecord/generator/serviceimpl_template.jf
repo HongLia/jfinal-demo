@@ -1,16 +1,23 @@
 package #(serviceImplPackageName);
 
-import #(modelPackageName).#(tableMeta.modelName);
+import #(modelPackageName).#(tableMeta.modelName)DTO;
 import #(serviceImport);
-import com.ambow.service.support.base.service.impl.BaseServiceImpl;
+import #(mapperImport);
+import com.yixiekeji.core.ibatis.base.dao.BaseMapper;
+import com.yixiekeji.core.ibatis.base.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
+
 
 @Service
-public class #(serviceImplName) extends BaseServiceImpl<#(tableMeta.modelName)> implements #(serviceName) {
+public class #(serviceImplName) extends BaseServiceImpl<#(tableMeta.modelName)DTO, String> implements #(serviceName) {
+
+    @Resource
+	private #(tableMeta.modelName)Mapper mapper;
 
     @Override
-    public #(tableMeta.modelName) getDao() {
-        return #(tableMeta.modelName).dao;
+    public BaseMapper<#(tableMeta.modelName)DTO, String> getMappser() {
+        return mapper;
     }
 
 }

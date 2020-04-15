@@ -20,6 +20,7 @@ import com.jfinal.kit.JavaKeyword;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
 import com.jfinal.template.Engine;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,19 +37,27 @@ public class AmbowGenerator {
 
 	protected Engine engine;
 	protected String controllerTemplate = "/com/jfinal/plugin/activerecord/generator/controller_template.jf";
+	protected String feignTemplate = "/com/jfinal/plugin/activerecord/generator/feign_template.jf";
+	protected String feignImplTemplate = "/com/jfinal/plugin/activerecord/generator/feignimpl_template.jf";
 	protected String serviceTemplate = "/com/jfinal/plugin/activerecord/generator/service_template.jf";
 	protected String serviceImplTemplate = "/com/jfinal/plugin/activerecord/generator/serviceimpl_template.jf";
+	protected String mapperTemplate = "/com/jfinal/plugin/activerecord/generator/mapper_template.jf";
+	protected String mapperXmlTemplate = "/com/jfinal/plugin/activerecord/generator/jf_mapper_xml.jf";
 	protected String sqlTemplate = "/com/jfinal/plugin/activerecord/generator/sql_template.jf";
-
-
 	private String controllerPackageName;
+	private String feignPackageName;
+	private String feignImplPackageName;
 	private String servicePackageName;
+    private String mapperPackageName;
 	private String serviceImplPackageName;
 	protected String modelPackageName;
 	protected String resourceDir;
 	protected String controllerOutputDir;
+	protected String feignOutputDir;
+	protected String feignImplOutputDir;
 	protected String serviceOutputDir;
 	protected String serviceImplOutputDir;
+    protected String mapperOutputDir;
 	protected boolean generateChainSetter = false;
 
 
@@ -74,25 +83,6 @@ public class AmbowGenerator {
 		put("java.lang.Byte", "getByte");
 	}};
 
-	public AmbowGenerator(String basePackageName, String baseOutputDir,String resourceDir) {
-		if (StrKit.isBlank(basePackageName)) {
-			throw new IllegalArgumentException("baseModelPackageName can not be blank.");
-		}
-		if (basePackageName.contains("/") || basePackageName.contains("\\")) {
-			throw new IllegalArgumentException("baseModelPackageName error : " + basePackageName);
-		}
-		if (StrKit.isBlank(baseOutputDir)) {
-			throw new IllegalArgumentException("baseModelOutputDir can not be blank.");
-		}
-		this.controllerPackageName = basePackageName + "." + "controller";
-		this.servicePackageName = basePackageName + "." + "service";
-		this.serviceImplPackageName = basePackageName + "." + "service.impl";
-		this.controllerOutputDir = baseOutputDir + "/controller";
-		this.serviceOutputDir = baseOutputDir + "/service";
-		this.serviceImplOutputDir = baseOutputDir + "/service/impl";
-		this.resourceDir = resourceDir;
-		initEngine();
-	}
 
 	public AmbowGenerator(String basePackageName, String baseOutputDir,String resourceDir,boolean generateController,boolean generateService) {
 		if (StrKit.isBlank(basePackageName)) {
@@ -105,11 +95,17 @@ public class AmbowGenerator {
 			throw new IllegalArgumentException("baseModelOutputDir can not be blank.");
 		}
 		this.controllerPackageName = basePackageName + "." + "controller";
+		this.feignPackageName = basePackageName + "." + "feign";
+		this.feignImplPackageName = basePackageName + "." + "feign.impl";
 		this.servicePackageName = basePackageName + "." + "service";
 		this.serviceImplPackageName = basePackageName + "." + "service.impl";
+        this.mapperPackageName = basePackageName + ".mapper";
 		this.controllerOutputDir = baseOutputDir + "/controller";
+		this.feignOutputDir = baseOutputDir + "/feign";
+		this.feignImplOutputDir = baseOutputDir + "/feign/impl";
 		this.serviceOutputDir = baseOutputDir + "/service";
 		this.serviceImplOutputDir = baseOutputDir + "/service/impl";
+        this.mapperOutputDir = baseOutputDir + "/mapper";
 		this.resourceDir = resourceDir;
 		this.generateController = generateController;
 		this.generateService = generateService;
@@ -130,7 +126,7 @@ public class AmbowGenerator {
 	}
 	
 	public void generate(List<TableMeta> tableMetas,String modelPackageName) {
-		System.out.println("Generate base model ...");
+		System.out.println("Generate controller & service ...");
 		this.modelPackageName = modelPackageName;
 
 		if(generateController){
@@ -138,6 +134,11 @@ public class AmbowGenerator {
 				genControllerContent(tableMeta);
 			}
 			writeToFileNotRep(tableMetas,controllerOutputDir,"","Controller");
+
+			for (TableMeta tableMeta : tableMetas) {
+				genFeignContent(tableMeta);
+			}
+			writeToFileNotRep(tableMetas,feignOutputDir,"","FeignClient");
 		}
 
 		if(generateService){
@@ -150,14 +151,24 @@ public class AmbowGenerator {
 				genServiceImplContent(tableMeta);
 			}
 			writeToFileNotRep(tableMetas,serviceImplOutputDir,"","ServiceImpl");
+
+			for (TableMeta tableMeta : tableMetas) {
+				genFeignImplContent(tableMeta);
+			}
+			writeToFileNotRep(tableMetas, feignImplOutputDir,"","FeignClientImpl");
+
+			for (TableMeta tableMeta : tableMetas) {
+				genMapperContent(tableMeta);
+			}
+			writeToFileNotRep(tableMetas,mapperOutputDir,"","Mapper");
+
+			for (TableMeta tableMeta : tableMetas) {
+				genMapperXmlContent(tableMeta);
+			}
+			writeToFileNotRep(tableMetas,resourceDir,"","Mapper.xml");
+
 		}
 
-
-
-		for (TableMeta tableMeta : tableMetas) {
-			genSqlContent(tableMeta);
-		}
-		writeToFile(tableMetas,resourceDir,"",".sql");
 	}
 	
 	protected void genControllerContent(TableMeta tableMeta) {
@@ -167,7 +178,30 @@ public class AmbowGenerator {
 		data.set("serviceName","I".concat(tableMeta.modelName).concat("Service"));
 		data.set("modelPackageName",modelPackageName);
 		data.set("serviceImport",servicePackageName + ".I" + tableMeta.modelName + "Service");
+		if(StringUtils.hasText(tableMeta.apiPrefix)){
+			if(!tableMeta.apiPrefix.startsWith("/"))
+				tableMeta.apiPrefix = "/" + tableMeta.apiPrefix;
+			if(!tableMeta.apiPrefix.endsWith("/"))
+				tableMeta.apiPrefix = tableMeta.apiPrefix + "/";
+		}
+		data.set("apiPrefix", tableMeta.apiPrefix);
+		//data.set("idJavaType", );
 		tableMeta.baseModelContent = engine.getTemplate(controllerTemplate).renderToString(data);
+	}
+
+	protected void genFeignContent(TableMeta tableMeta) {
+		Kv data = Kv.by("feignPackageName", feignPackageName);
+		data.set("tableMeta", tableMeta);
+		data.set("modelPackageName",modelPackageName);
+		if(StringUtils.hasText(tableMeta.apiPrefix)){
+			if(!tableMeta.apiPrefix.startsWith("/"))
+				tableMeta.apiPrefix = "/" + tableMeta.apiPrefix;
+			if(!tableMeta.apiPrefix.endsWith("/"))
+				tableMeta.apiPrefix = tableMeta.apiPrefix + "/";
+		}
+		data.set("apiPrefix", tableMeta.apiPrefix);
+		//data.set("idJavaType", );
+		tableMeta.baseModelContent = engine.getTemplate(feignTemplate).renderToString(data);
 	}
 
 	protected void genServiceContent(TableMeta tableMeta) {
@@ -180,15 +214,39 @@ public class AmbowGenerator {
 
 	protected void genServiceImplContent(TableMeta tableMeta) {
 		Kv data = Kv.by("serviceImplPackageName", serviceImplPackageName);
-		data.set("generateChainSetter", generateChainSetter);
 		data.set("tableMeta", tableMeta);
 		data.set("modelPackageName",modelPackageName);
 		data.set("serviceImport",servicePackageName + ".I" + tableMeta.modelName + "Service");
 		data.set("serviceImplName",tableMeta.modelName + "ServiceImpl");
 		data.set("serviceName","I" + tableMeta.modelName + "Service");
-
+        data.set("mapperImport", mapperPackageName + "." + tableMeta.modelName + "Mapper");
 		tableMeta.baseModelContent = engine.getTemplate(serviceImplTemplate).renderToString(data);
 	}
+
+	protected void genFeignImplContent(TableMeta tableMeta) {
+		Kv data = Kv.by("feignImplPackageName", feignImplPackageName);
+		data.set("tableMeta", tableMeta);
+		data.set("modelPackageName",modelPackageName);
+		data.set("serviceImport",servicePackageName + ".I" + tableMeta.modelName + "Service");
+		data.set("serviceImplName",tableMeta.modelName + "ServiceImpl");
+		data.set("serviceName","I" + tableMeta.modelName + "Service");
+		data.set("feignPackageName",feignPackageName);
+		tableMeta.baseModelContent = engine.getTemplate(feignImplTemplate).renderToString(data);
+	}
+
+	protected void genMapperContent(TableMeta tableMeta) {
+		Kv data = Kv.by("mapperPackageName", mapperPackageName);
+		data.set("tableMeta", tableMeta);
+		data.set("modelPackageName",modelPackageName);
+		tableMeta.baseModelContent = engine.getTemplate(mapperTemplate).renderToString(data);
+	}
+
+	protected void genMapperXmlContent(TableMeta tableMeta) {
+		Kv data = Kv.by("mapperImport", mapperPackageName + "." + tableMeta.modelName + "Mapper");
+		data.set("tableMeta", tableMeta);
+		tableMeta.baseModelContent = engine.getTemplate(mapperXmlTemplate).renderToString(data);
+	}
+
 
 	protected void genSqlContent(TableMeta tableMeta) {
 		String abbreviationUp = "";
@@ -274,7 +332,7 @@ public class AmbowGenerator {
 			dir.mkdirs();
 		}
 
-		String target = outputDir + File.separator + prefix + tableMeta.modelName + subfix + ".java";
+		String target = outputDir + File.separator + prefix + tableMeta.modelName + subfix + ((subfix.contains(".") ? "" : ".java"));
 
 		File file = new File(target);
 		if (file.exists()) {

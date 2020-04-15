@@ -1,0 +1,9 @@
+package #(mapperPackageName);
+
+import com.yixiekeji.core.ibatis.base.dao.BaseMapper;
+import #(modelPackageName).#(tableMeta.modelName)DTO;
+
+
+public interface #(tableMeta.modelName)Mapper extends BaseMapper<#(tableMeta.modelName)DTO, String> {
+
+}

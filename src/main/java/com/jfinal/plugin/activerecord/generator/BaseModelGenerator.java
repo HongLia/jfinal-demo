@@ -34,7 +34,7 @@ import com.jfinal.template.Engine;
 public class BaseModelGenerator {
 	
 	protected Engine engine;
-	protected String template = "/com/jfinal/plugin/activerecord/generator/base_model_template.jf";
+	protected String template = "/com/jfinal/plugin/activerecord/generator/jf_model.jf";
 	
 	protected String baseModelPackageName;
 	protected String baseModelOutputDir;
@@ -42,22 +42,7 @@ public class BaseModelGenerator {
 	
 	protected JavaKeyword javaKeyword = JavaKeyword.me;
 	
-	/**
-	 * 针对 Model 中七种可以自动转换类型的 getter 方法，调用其具有确定类型返回值的 getter 方法
-	 * 享用自动类型转换的便利性，例如 getInt(String)、getStr(String)
-	 * 其它方法使用泛型返回值方法： get(String)
-	 * 注意：jfinal 3.2 及以上版本 Model 中的六种 getter 方法才具有类型转换功能
-	 */
-	@SuppressWarnings("serial")
-	protected Map<String, String> getterTypeMap = new HashMap<String, String>() {{
-		put("java.lang.String", "getStr");
-		put("java.lang.Integer", "getInt");
-		put("java.lang.Long", "getLong");
-		put("java.lang.Double", "getDouble");
-		put("java.lang.Float", "getFloat");
-		put("java.lang.Short", "getShort");
-		put("java.lang.Byte", "getByte");
-	}};
+
 	
 	public BaseModelGenerator(String baseModelPackageName, String baseModelOutputDir) {
 		if (StrKit.isBlank(baseModelPackageName)) {
@@ -80,7 +65,6 @@ public class BaseModelGenerator {
 		engine = new Engine();
 		engine.setToClassPathSourceFactory();	// 从 class path 内读模板文件
 		engine.addSharedMethod(new StrKit());
-		engine.addSharedObject("getterTypeMap", getterTypeMap);
 		engine.addSharedObject("javaKeyword", javaKeyword);
 	}
 	

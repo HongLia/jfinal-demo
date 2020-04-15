@@ -94,7 +94,7 @@ public class MetaBuilder {
 		}
 	}
 	
-	public List<TableMeta> build() {
+	public List<TableMeta> build(String author, String apiPrefix) {
 		System.out.println("Build TableMeta ...");
 		try {
 			conn = dataSource.getConnection();
@@ -105,6 +105,8 @@ public class MetaBuilder {
 			for (TableMeta tableMeta : ret) {
 				buildPrimaryKey(tableMeta);
 				buildColumnMetas(tableMeta);
+				tableMeta.author = author;
+				tableMeta.apiPrefix = apiPrefix;
 			}
 			removeNoPrimaryKeyTable(ret);
 			return ret;
@@ -187,7 +189,7 @@ public class MetaBuilder {
 	 * 使用 modelName 构建 baseModelName
 	 */
 	protected String buildBaseModelName(String modelName) {
-		return "Base" + modelName;
+		return modelName + "DTO";
 	}
 	
 	/**
