@@ -181,8 +181,6 @@ public class AmbowGenerator {
 		if(StringUtils.hasText(tableMeta.apiPrefix)){
 			if(!tableMeta.apiPrefix.startsWith("/"))
 				tableMeta.apiPrefix = "/" + tableMeta.apiPrefix;
-			if(!tableMeta.apiPrefix.endsWith("/"))
-				tableMeta.apiPrefix = tableMeta.apiPrefix + "/";
 		}
 		data.set("apiPrefix", tableMeta.apiPrefix);
 		//data.set("idJavaType", );
@@ -196,8 +194,6 @@ public class AmbowGenerator {
 		if(StringUtils.hasText(tableMeta.apiPrefix)){
 			if(!tableMeta.apiPrefix.startsWith("/"))
 				tableMeta.apiPrefix = "/" + tableMeta.apiPrefix;
-			if(!tableMeta.apiPrefix.endsWith("/"))
-				tableMeta.apiPrefix = tableMeta.apiPrefix + "/";
 		}
 		data.set("apiPrefix", tableMeta.apiPrefix);
 		//data.set("idJavaType", );

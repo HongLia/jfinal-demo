@@ -46,6 +46,11 @@ public class #(tableMeta.modelName)FeignClientImpl implements #(tableMeta.modelN
     }
 
     @Override
+    List<#(tableMeta.modelName)DTO> listByIds(String ids);
+        return #(serverImplName).selectByIds(ids);
+    }
+
+    @Override
     public void add(#(tableMeta.modelName)DTO entity){
         entity.setCreateTime(new Date());
         #(serverImplName).insertSelective(entity);

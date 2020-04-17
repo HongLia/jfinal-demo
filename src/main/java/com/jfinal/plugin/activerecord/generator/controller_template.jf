@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Api(tags = "#(tableMeta.remarks)表")
 @RestController
-@RequestMapping("#(tableMeta.modelName)")
+@RequestMapping("#(firstCharToLowerCase(tableMeta.modelName))")
 public class #(tableMeta.modelName)Controller {
 
     #set(serverImplName = firstCharToLowerCase(tableMeta.modelName) + 'Service')
@@ -30,28 +30,30 @@ public class #(tableMeta.modelName)Controller {
     @Autowired
     private #(serviceName) #(serverImplName);
 
-    @ResponseBody
     @RequestMapping(value = "page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询", httpMethod = "POST")
     public Result page(@RequestBody #(tableMeta.modelName)DTO entity) {
         return #(serverImplName).show(entity, entity.getPageSize(), entity.getCurrentPage());
     }
 
-    @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.POST)
     @ApiOperation(value = "列表查询", httpMethod = "POST")
     public Result list(@RequestBody #(tableMeta.modelName)DTO entity) {
         return Result.success(#(serverImplName).select(entity));
     }
 
-    @ResponseBody
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查询详细信息", httpMethod = "GET")
     public Result queryById(@PathVariable("id") #(tableMeta.primaryKeyJavaType) id) {
         return Result.success(#(serverImplName).selectByPrimaryKey(id));
     }
 
-    @ResponseBody
+    @RequestMapping(value = "listByIds", method = RequestMethod.GET)
+    @ApiOperation(value = "根据ids查询", httpMethod = "GET")
+    public Result listByIds(@RequestParam(value = "ids", required = true) String ids) {
+        return Result.success(#(serverImplName).selectByIds(ids));
+    }
+
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @ApiOperation(value = "新增数据", httpMethod = "POST")
     public Result add(@RequestBody #(tableMeta.modelName)DTO entity) {
@@ -60,7 +62,6 @@ public class #(tableMeta.modelName)Controller {
         return Result.success();
     }
 
-    @ResponseBody
     @RequestMapping(value = "update", method = RequestMethod.POST)
     @ApiOperation(value = "修改数据", httpMethod = "POST")
     public Result update(@RequestBody #(tableMeta.modelName)DTO entity) {
@@ -69,7 +70,6 @@ public class #(tableMeta.modelName)Controller {
         return Result.success();
     }
 
-    @ResponseBody
     @RequestMapping(value = "delete", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")
     public Result delete(@RequestParam(value = "ids", required = true) String ids) {

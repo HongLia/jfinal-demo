@@ -20,34 +20,31 @@ import java.util.List;
 @FeignClient(name = "#(firstCharToLowerCase(tableMeta.modelName))")
 public interface #(tableMeta.modelName)FeignClient {
 
-    @ResponseBody
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询", httpMethod = "POST")
     PageInfo<#(tableMeta.modelName)DTO> page(@RequestBody #(tableMeta.modelName)DTO entity);
 
-    @ResponseBody
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/list", method = RequestMethod.POST)
     @ApiOperation(value = "列表查询", httpMethod = "POST")
     List<#(tableMeta.modelName)DTO> list(@RequestBody #(tableMeta.modelName)DTO entity);
 
-    @ResponseBody
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查询详细信息", httpMethod = "GET")
     #(tableMeta.modelName)DTO queryById(@PathVariable("id") Integer id);
 
-    @ResponseBody
+    @RequestMapping(value = "listByIds", method = RequestMethod.GET)
+    @ApiOperation(value = "根据ids查询", httpMethod = "GET")
+    List<#(tableMeta.modelName)DTO> listByIds(@RequestParam(value = "ids", required = true) String ids);
+
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/add", method = RequestMethod.POST)
     @ApiOperation(value = "新增数据", httpMethod = "POST")
     void add(@RequestBody #(tableMeta.modelName)DTO entity);
 
-    @ResponseBody
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/update", method = RequestMethod.POST)
     @ApiOperation(value = "修改数据", httpMethod = "POST")
     void update(@RequestBody #(tableMeta.modelName)DTO entity);
 
-    @ResponseBody
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/delete", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")
     void delete(@RequestParam(value = "ids", required = true) String ids);
-
 }
