@@ -37,26 +37,29 @@ public class Generator {
 	protected BaseModelGenerator baseModelGenerator;
 
 	protected AmbowGenerator ambowGenerator;
-	protected ModelGenerator modelGenerator;
 	protected MappingKitGenerator mappingKitGenerator;
 	protected DataDictionaryGenerator dataDictionaryGenerator;
 	protected boolean generateDataDictionary = false;
 
+
 	private String author;
 
 	private String apiPrefix;
-	
+
 	/**
-	 * 构造 Generator，生成 BaseModel、Model、MappingKit 三类文件，其中 MappingKit 输出目录与包名与 Model相同
-	 * @param dataSource 数据源
-	 * @param baseModelPackageName base model 包名
-	 * @param baseModelOutputDir base mode 输出目录
-	 * @param modelPackageName model 包名
-	 * @param modelOutputDir model 输出目录
+	 *
+	 * @param dataSource
+	 * @param baseModelPackageName
+	 * @param baseModelOutputDir
+	 * @param controllerPackageName
+	 * @param ambowDir
+	 * @param resourceDir
+	 * @param generateControll
+	 * @param generateServic
 	 */
-	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir, String modelPackageName, String modelOutputDir,String controllerPackageName,String ambowDir,String resourceDir,
+	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir, String controllerPackageName,String ambowDir,String resourceDir,
 					 boolean generateControll,boolean generateServic) {
-		this(dataSource, new BaseModelGenerator(baseModelPackageName, baseModelOutputDir), new ModelGenerator(modelPackageName, baseModelPackageName, modelOutputDir),
+		this(dataSource, new BaseModelGenerator(baseModelPackageName, baseModelOutputDir),
 				new AmbowGenerator(controllerPackageName,ambowDir,resourceDir,generateControll,generateServic)
 		);
 	}
@@ -81,7 +84,6 @@ public class Generator {
 		
 		this.metaBuilder = new MetaBuilder(dataSource);
 		this.baseModelGenerator = baseModelGenerator;
-		this.modelGenerator = null;
 		this.mappingKitGenerator = null;
 		this.dataDictionaryGenerator = null;
 	}
@@ -90,23 +92,18 @@ public class Generator {
 	 * 使用指定 BaseModelGenerator、ModelGenerator 构造 Generator 
 	 * 生成 BaseModel、Model、MappingKit 三类文件，其中 MappingKit 输出目录与包名与 Model相同
 	 */
-	public Generator(DataSource dataSource, BaseModelGenerator baseModelGenerator, ModelGenerator modelGenerator,AmbowGenerator ambowGenerator) {
+	public Generator(DataSource dataSource, BaseModelGenerator baseModelGenerator,AmbowGenerator ambowGenerator) {
 		if (dataSource == null) {
 			throw new IllegalArgumentException("dataSource can not be null.");
 		}
 		if (baseModelGenerator == null) {
-			throw new IllegalArgumentException("baseModelGenerator can not be null.");
+			throw new IllegalArgumentException("entity Generator can not be null.");
 		}
-		if (modelGenerator == null) {
-			throw new IllegalArgumentException("modelGenerator can not be null.");
-		}
-		
+
 		this.metaBuilder = new MetaBuilder(dataSource);
 		this.baseModelGenerator = baseModelGenerator;
 		this.ambowGenerator = ambowGenerator;
-		this.modelGenerator = modelGenerator;
-		this.mappingKitGenerator = new MappingKitGenerator(modelGenerator.modelPackageName, modelGenerator.modelOutputDir);
-		this.dataDictionaryGenerator = new DataDictionaryGenerator(dataSource, modelGenerator.modelOutputDir);
+		this.dataDictionaryGenerator = new DataDictionaryGenerator(dataSource, baseModelGenerator.baseModelOutputDir);
 	}
 	
 	/**
@@ -188,26 +185,7 @@ public class Generator {
 		metaBuilder.addExcludedTable(excludedTables);
 	}
 	
-	/**
-	 * 设置用于生成 Model 的模板文件，模板引擎将在 class path 与 jar 包内寻找模板文件
-	 * 
-	 * 默认模板为："/com/jfinal/plugin/activerecord/generator/model_template.jf"
-	 */
-	public void setModelTemplate(String modelTemplate) {
-		if (modelGenerator != null) {
-			modelGenerator.setTemplate(modelTemplate);
-		}
-	}
-	
-	/**
-	 * 设置是否在 Model 中生成 dao 对象，默认生成
-	 */
-	public void setGenerateDaoInModel(boolean generateDaoInModel) {
-		if (modelGenerator != null) {
-			modelGenerator.setGenerateDaoInModel(generateDaoInModel);
-		}
-	}
-	
+
 	/**
 	 * 设置是否生成数据字典 Dictionary 文件，默认不生成
 	 */
@@ -324,6 +302,12 @@ public class Generator {
 	public void setApiPrefix(String apiPrefix) {
 		this.apiPrefix = apiPrefix;
 	}
+
+    public void setGeneratorTables(String[] generatorTables) {
+        if (metaBuilder != null) {
+            metaBuilder.setGeneratorTables(generatorTables);
+        }
+    }
 }
 
 

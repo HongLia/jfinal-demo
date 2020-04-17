@@ -6,12 +6,11 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import com.yixiekeji.core.page.PageInfoExt
+import com.yixiekeji.core.page.PageInfoExt;
 
 /**
  * <p>
@@ -32,7 +31,7 @@ public class #(tableMeta.modelName)DTO extends PageInfoExt {
 
 #for(cm : tableMeta.columnMetas)
 
-    #if(tableMeta.primaryKey == argName)
+    #if(tableMeta.primaryKey == cm.attrName)
     @Id
     #end
     #if (cm.remarks)

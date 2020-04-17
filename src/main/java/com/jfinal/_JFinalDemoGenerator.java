@@ -48,10 +48,11 @@ public class _JFinalDemoGenerator {
 		String resourceDir = PathKit.getWebRootPath() + "/src/main/resources/template/gen";
 		
 		// 创建生成器
-		Generator generator = new Generator(getDataSource(), modelPackage, baseModelOutputDir, modelPackageName, modelOutputDir,genPackageName,genOupputDir,resourceDir, controller, service);
+		Generator generator = new Generator(getDataSource(), modelPackage, baseModelOutputDir,genPackageName,genOupputDir,resourceDir, controller, service);
 
 		// 配置是否生成备注
 		generator.setGenerateRemarks(true);
+		generator.setGeneratorTables(new String[]{"teacher"});
 
 		generator.setAuthor(author);
 
@@ -66,14 +67,11 @@ public class _JFinalDemoGenerator {
 		// 添加不需要生成的表名
 		generator.addExcludedTable("adv");
 		
-		// 设置是否在 Model 中生成 dao 对象
-		generator.setGenerateDaoInModel(true);
-		
 		// 设置是否生成字典文件
 		generator.setGenerateDataDictionary(true);
 		
 		// 设置需要被移除的表名前缀用于生成modelName。例如表名 "osc_user"，移除前缀 "osc_"后生成的model名为 "User"而非 OscUser
-		generator.setRemovedTableNamePrefixes("bus_");
+		generator.setRemovedTableNamePrefixes("t_");
 		
 		// 生成
 		generator.generate();

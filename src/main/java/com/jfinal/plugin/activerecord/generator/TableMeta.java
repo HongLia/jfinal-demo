@@ -29,6 +29,7 @@ public class TableMeta implements Serializable {
 	public String name;					// 表名
 	public String remarks;				// 表备注
 	public String primaryKey;			// 主键，复合主键以逗号分隔
+	public String primaryKeyJavaType;	//主键java类型
 	public List<ColumnMeta> columnMetas = new ArrayList<ColumnMeta>();	// 字段 meta
 	
 	// ---------

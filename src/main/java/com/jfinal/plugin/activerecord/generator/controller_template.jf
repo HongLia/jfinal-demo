@@ -2,7 +2,6 @@ package #(controllerPackageName);
 
 import #(modelPackageName).#(tableMeta.modelName)DTO;
 import #(serviceImport);
-import com.yixiekeji.core.response.AppStatus;
 import com.yixiekeji.core.response.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,9 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Date;
 
 /**
  * #(tableMeta.remarks)控制层
@@ -50,7 +47,7 @@ public class #(tableMeta.modelName)Controller {
     @ResponseBody
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查询详细信息", httpMethod = "GET")
-    public Result queryById(@PathVariable("id") Integer id) {
+    public Result queryById(@PathVariable("id") #(tableMeta.primaryKeyJavaType) id) {
         return Result.success(#(serverImplName).selectByPrimaryKey(id));
     }
 
@@ -58,7 +55,7 @@ public class #(tableMeta.modelName)Controller {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @ApiOperation(value = "新增数据", httpMethod = "POST")
     public Result add(@RequestBody #(tableMeta.modelName)DTO entity) {
-        entity.setCreateTime(LocalDateTime.now());
+        entity.setCreateTime(new Date());
         #(serverImplName).insertSelective(entity);
         return Result.success();
     }
@@ -67,7 +64,7 @@ public class #(tableMeta.modelName)Controller {
     @RequestMapping(value = "update", method = RequestMethod.POST)
     @ApiOperation(value = "修改数据", httpMethod = "POST")
     public Result update(@RequestBody #(tableMeta.modelName)DTO entity) {
-        entity.setUpdateTime(LocalDateTime.now());
+        entity.setUpdateTime(new Date());
         #(serverImplName).updateByPrimaryKeySelective(entity);
         return Result.success();
     }

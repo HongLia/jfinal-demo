@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,13 +47,13 @@ public class #(tableMeta.modelName)FeignClientImpl implements #(tableMeta.modelN
 
     @Override
     public void add(#(tableMeta.modelName)DTO entity){
-        entity.setCreateTime(LocalDateTime.now());
+        entity.setCreateTime(new Date());
         #(serverImplName).insertSelective(entity);
     }
 
     @Override
     public void update(#(tableMeta.modelName)DTO entity){
-        entity.setUpdateTime(LocalDateTime.now());
+        entity.setUpdateTime(new Date());
         #(serverImplName).updateByPrimaryKeySelective(entity);
     }
 

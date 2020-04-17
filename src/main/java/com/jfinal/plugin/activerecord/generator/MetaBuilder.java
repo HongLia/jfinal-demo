@@ -23,12 +23,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Predicate;
 import javax.sql.DataSource;
 import com.jfinal.kit.StrKit;
@@ -43,6 +38,7 @@ public class MetaBuilder {
 	protected DataSource dataSource;
 	protected Dialect dialect = new MysqlDialect();
 	protected Set<String> excludedTables = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+	private List<String> generatorTables;
 	
 	protected Predicate<String> filterPredicate = null;
 	
@@ -103,6 +99,10 @@ public class MetaBuilder {
 			List<TableMeta> ret = new ArrayList<TableMeta>();
 			buildTableNames(ret);
 			for (TableMeta tableMeta : ret) {
+				if(null != this.generatorTables)
+					if(!this.generatorTables.contains(tableMeta.name))
+						continue;
+				System.out.println("*****************************" + tableMeta.name + "*****************************");
 				buildPrimaryKey(tableMeta);
 				buildColumnMetas(tableMeta);
 				tableMeta.author = author;
@@ -354,7 +354,11 @@ public class MetaBuilder {
 			
 			// 构造字段对应的属性名 attrName
 			cm.attrName = buildAttrName(cm.name);
-			
+
+			if(cm.attrName.endsWith(tableMeta.primaryKey)){
+				tableMeta.primaryKeyJavaType = cm.javaType;
+			}
+
 			// 备注字段赋值
 			if (generateRemarks && columnMetaMap.containsKey(cm.name)) {
 				cm.remarks = columnMetaMap.get(cm.name).remarks;
@@ -421,6 +425,10 @@ public class MetaBuilder {
 			colName = colName.toLowerCase();
 		}
 		return StrKit.toCamelCase(colName);
+	}
+
+	public void setGeneratorTables(String[] generatorTables) {
+		this.generatorTables = Arrays.asList(generatorTables) ;
 	}
 }
 
