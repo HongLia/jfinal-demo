@@ -1,0 +1,18 @@
+spring: 
+  application:
+    name: #(projectName)
+  cloud:
+    bootstrap:
+      enabled: false
+    config:
+      uri: https://config-server.ambow.com/
+
+server:
+  undertow:
+    io-threads: 2
+    max-http-post-size: 0
+    worker-threads: 200
+    direct-buffers: true
+    buffer-size: 1024
+  port: #(port)
+

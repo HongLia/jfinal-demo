@@ -46,6 +46,7 @@ public class TableMeta implements Serializable {
 	public int colTypeMaxLen = "Type".length();				// 字段类型最大宽度，用于辅助生成字典文件样式
 	public int colDefaultValueMaxLen = "Default".length();	// 字段默认值最大宽度，用于辅助生成字典文件样式
 	public String author = "auto";
+
 	public String apiPrefix = "";
 }
 

@@ -1,6 +1,6 @@
 package #(mapperPackageName);
 
-import com.yixiekeji.core.ibatis.base.dao.BaseMapper;
+import com.ambow.common.mybatis.base.dao.BaseMapper;
 import #(modelPackageName).#(tableMeta.modelName)DTO;
 
 

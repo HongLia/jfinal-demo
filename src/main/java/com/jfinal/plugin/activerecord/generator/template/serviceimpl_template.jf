@@ -3,8 +3,8 @@ package #(serviceImplPackageName);
 import #(modelPackageName).#(tableMeta.modelName)DTO;
 import #(serviceImport);
 import #(mapperImport);
-import com.yixiekeji.core.ibatis.base.dao.BaseMapper;
-import com.yixiekeji.core.ibatis.base.impl.BaseServiceImpl;
+import com.ambow.common.mybatis.base.dao.BaseMapper;
+import com.ambow.common.mybatis.base.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 

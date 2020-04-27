@@ -1,0 +1,19 @@
+package  #(configPackageName);
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import tk.mybatis.mapper.entity.Config;
+import tk.mybatis.mapper.mapperhelper.MapperHelper;
+
+@Component
+public class MapperHelperConfig {
+
+    @Bean
+    public MapperHelper mapperHelper(){
+        MapperHelper mapperHelper = new MapperHelper();
+        Config config = new Config();
+        config.setNotEmpty(true);
+        mapperHelper.setConfig(config);
+        return mapperHelper;
+    }
+}

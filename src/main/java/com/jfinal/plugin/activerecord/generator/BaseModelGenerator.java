@@ -20,9 +20,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import com.jfinal.kit.JavaKeyword;
 import com.jfinal.kit.Kv;
 import com.jfinal.kit.StrKit;
@@ -34,7 +33,7 @@ import com.jfinal.template.Engine;
 public class BaseModelGenerator {
 	
 	protected Engine engine;
-	protected String template = "/com/jfinal/plugin/activerecord/generator/jf_model.jf";
+	protected String template = "/com/jfinal/plugin/activerecord/generator/template/jf_model.jf";
 	
 	protected String baseModelPackageName;
 	protected String baseModelOutputDir;
@@ -44,20 +43,17 @@ public class BaseModelGenerator {
 	
 
 	
-	public BaseModelGenerator(String baseModelPackageName, String baseModelOutputDir) {
+	public BaseModelGenerator(String baseModelPackageName, GeneratorConfig config) {
 		if (StrKit.isBlank(baseModelPackageName)) {
 			throw new IllegalArgumentException("baseModelPackageName can not be blank.");
 		}
 		if (baseModelPackageName.contains("/") || baseModelPackageName.contains("\\")) {
 			throw new IllegalArgumentException("baseModelPackageName error : " + baseModelPackageName);
 		}
-		if (StrKit.isBlank(baseModelOutputDir)) {
-			throw new IllegalArgumentException("baseModelOutputDir can not be blank.");
-		}
 		
 		this.baseModelPackageName = baseModelPackageName;
-		this.baseModelOutputDir = baseModelOutputDir;
-		
+		this.baseModelOutputDir = config.modelDir + "/src/main/java/com/ambow/" + config.projectName + "/entity/";
+
 		initEngine();
 	}
 	

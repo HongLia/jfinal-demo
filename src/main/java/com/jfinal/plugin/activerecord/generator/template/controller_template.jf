@@ -2,7 +2,7 @@ package #(controllerPackageName);
 
 import #(modelPackageName).#(tableMeta.modelName)DTO;
 import #(serviceImport);
-import com.yixiekeji.core.response.Result;
+import com.ambow.common.response.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import java.util.Date;
  *
  * @author #(tableMeta.author)
  */
-@Api(tags = "#(tableMeta.remarks)表")
+@Api(tags = "#(tableMeta.remarks)")
 @RestController
 @RequestMapping("#(firstCharToLowerCase(tableMeta.modelName))")
 public class #(tableMeta.modelName)Controller {

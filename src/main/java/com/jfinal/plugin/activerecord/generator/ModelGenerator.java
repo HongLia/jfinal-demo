@@ -31,7 +31,7 @@ import com.jfinal.template.Engine;
 public class ModelGenerator {
 	
 	protected Engine engine;
-	protected String template = "/com/jfinal/plugin/activerecord/generator/model_template.jf";
+	protected String template = "/com/jfinal/plugin/activerecord/generator/template/model_template.jf";
 	
 	protected String modelPackageName;
 	protected String baseModelPackageName;

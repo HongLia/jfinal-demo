@@ -1,0 +1,22 @@
+package #(appPackageName);
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import tk.mybatis.spring.annotation.MapperScan;
+
+@SpringBootApplication
+@EnableTransactionManagement //启动事务
+@EnableDiscoveryClient
+@EnableEurekaClient
+@MapperScan(value = "com.ambow.#(projectName).mapper", mapperHelperRef = "mapperHelper")
+@EnableFeignClients
+public class #(fProjectName) {
+
+    public static void main(String[] args) {
+        SpringApplication.run(#(fProjectName).class, args);
+    }
+}

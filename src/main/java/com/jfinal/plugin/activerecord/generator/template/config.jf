@@ -1,0 +1,79 @@
+spring:
+  datasource:
+    #druid:
+    enable: true
+    username: #(dbuser)
+    password: #(dbpwd)
+    url: #(dburl)
+    async-init: true
+    default-auto-commit: false
+
+    fail-fast: true
+    initialSize: 10
+    maxActive: 100
+    minIdle: 10
+    maxWait: 6000
+    timeBetweenEvictionRunsMillis: 6000
+    minEvictableIdleTimeMillis: 300000
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 10000
+    filters: stat,wall,logback
+    useGlobalDataSourceStat: true
+    stat-view-servlet:
+      enabled: true
+      reset-enable: false
+      login-username: ambow
+      login-password: Ambow99999999
+      url-pattern: /druid/*
+    web-stat-filter:
+      enabled: false
+      url-pattern: /*
+      exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
+  redis:
+    database: 0
+    host: redis
+    port: 6379
+    password: Ambow99999999
+    timeout: 3600
+    lettuce:
+      pool:
+        min-idle: 100
+        max-active: 10000
+        max-idle: 200
+        max-wait: 60000
+info:
+  head: head
+  body: body
+management:
+  endpoints:
+    web:
+      exposure:
+        #加载所有的端点，默认只加载了info、health
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+    beans:
+      cache:
+        time-to-live: 10s
+
+
+# 日志文件路径
+logging:
+  config: classpath:logback-spring.xml
+  path: /applogs/#(projectName)
+
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://eureka.base-service:30001/eureka   #http://localhost:31001/eureka
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-renewal-interval-in-seconds: 1 #每间隔1s，向服务端发送一次心跳，证明自己依然”存活“。
+    lease-expiration-duration-in-seconds: 2 # 告诉服务端，如果我2s之内没有给你发心跳，就代表我“死”了，将我踢出掉。
+    status-page-url: http://${spring.cloud.client.ip-address}:${server.port}/doc.html#/

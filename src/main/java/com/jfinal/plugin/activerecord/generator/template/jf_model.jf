@@ -6,11 +6,10 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import com.yixiekeji.core.page.PageInfoExt;
+import com.ambow.common.page.PageInfoExt;
 
 /**
  * <p>

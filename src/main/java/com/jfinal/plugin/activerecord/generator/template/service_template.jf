@@ -1,7 +1,7 @@
 package #(servicePackageName);
 
 import #(modelPackageName).#(tableMeta.modelName)DTO;
-import com.yixiekeji.core.ibatis.base.service.BaseService;
+import com.ambow.common.mybatis.base.service.BaseService;
 
 public interface I#(tableMeta.modelName)Service extends BaseService<#(tableMeta.modelName)DTO, String> {
 

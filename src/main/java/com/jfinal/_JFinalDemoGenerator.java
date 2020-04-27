@@ -3,6 +3,7 @@ package com.jfinal;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.activerecord.generator.Generator;
+import com.jfinal.plugin.activerecord.generator.GeneratorConfig;
 import com.jfinal.plugin.druid.DruidPlugin;
 
 import javax.sql.DataSource;
@@ -12,47 +13,31 @@ import javax.sql.DataSource;
  */
 public class _JFinalDemoGenerator {
 
-	private static final String url = "jdbc:mysql://mysql:3306/ambow_student?serverTimezone=GMT%2B8&useSSL=false";
-	private static final String user = "ambow_student";
-	private static final String pwd = "GnGfHnbLKEnk6doG";
-	private static final boolean controller = true;
-	private static final boolean service = true;
+	private static final String url = "jdbc:mysql://mysql:3306/ambow_dict?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
+	private static final String user = "ambow_dict";
+	private static final String pwd = "JHHVGESsmNNBpUjN";
+	// 是否只生成entity
+	private static final boolean genEntityOnly = false;
 	private static final String author = "ghy";
 	private static final String apiPrefix = "/api/v2";
+	private static final String projectName = "dict";
+	private static final String port = "30100";
+	private static final String serverName = "字典服务";
+	private static final String outPath = "E:/gen";
 
-	public static DataSource getDataSource() {
-		DruidPlugin druidPlugin = new DruidPlugin(url, user, pwd);
-		druidPlugin.setInitialSize(1).setMinIdle(1).setMaxActive(2000).setTimeBetweenEvictionRunsMillis(5000).setValidationQuery("select 1")
-				.setTimeBetweenEvictionRunsMillis(60000).setMinEvictableIdleTimeMillis(30000).setFilters("stat,wall");
-		druidPlugin.setConnectionProperties("useInformationSchema=true;remarks=true");
-		druidPlugin.start();
-		return druidPlugin.getDataSource();
-	}
-	
+	// 生成tables 空为全部生成
+	private static final String[] tables = {"dict_application"};
+
+
 	public static void main(String[] args) {
-		// model 所使用的包名
-		String modelPackage = "com.ambow.student.entity";
+		GeneratorConfig config = new GeneratorConfig(projectName,port,author,serverName,outPath);
 
-		String genPackageName = "com.ambow.student";
-
-		// model 文件保存路径
-		String baseModelOutputDir = PathKit.getWebRootPath() + "/src/main/java/com/ambow/student/entity";
-
-		String genOupputDir = PathKit.getWebRootPath() + "/src/main/java/com/ambow/student";
-		
-		// model 所使用的包名 (MappingKit 默认使用的包名)
-		String modelPackageName = "com.ambow.service.gen.model";
-		// model 文件保存路径 (MappingKit 与 DataDictionary 文件默认保存路径)
-		String modelOutputDir = baseModelOutputDir + "/..";
-
-		String resourceDir = PathKit.getWebRootPath() + "/src/main/resources/template/gen";
-		
 		// 创建生成器
-		Generator generator = new Generator(getDataSource(), modelPackage, baseModelOutputDir,genPackageName,genOupputDir,resourceDir, controller, service);
+		Generator generator = new Generator(url, user, pwd, config, genEntityOnly);
 
 		// 配置是否生成备注
 		generator.setGenerateRemarks(true);
-		generator.setGeneratorTables(new String[]{"teacher"});
+		generator.setGeneratorTables(tables);
 
 		generator.setAuthor(author);
 

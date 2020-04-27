@@ -19,6 +19,7 @@ package com.jfinal.plugin.activerecord.generator;
 import java.util.List;
 import javax.sql.DataSource;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
+import com.jfinal.plugin.druid.DruidPlugin;
 
 /**
  * 生成器
@@ -35,6 +36,7 @@ public class Generator {
 	protected Dialect dialect = null;
 	protected MetaBuilder metaBuilder;
 	protected BaseModelGenerator baseModelGenerator;
+	protected GeneratorConfig config;
 
 	protected AmbowGenerator ambowGenerator;
 	protected MappingKitGenerator mappingKitGenerator;
@@ -46,64 +48,34 @@ public class Generator {
 
 	private String apiPrefix;
 
-	/**
-	 *
-	 * @param dataSource
-	 * @param baseModelPackageName
-	 * @param baseModelOutputDir
-	 * @param controllerPackageName
-	 * @param ambowDir
-	 * @param resourceDir
-	 * @param generateControll
-	 * @param generateServic
-	 */
-	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir, String controllerPackageName,String ambowDir,String resourceDir,
-					 boolean generateControll,boolean generateServic) {
-		this(dataSource, new BaseModelGenerator(baseModelPackageName, baseModelOutputDir),
-				new AmbowGenerator(controllerPackageName,ambowDir,resourceDir,generateControll,generateServic)
+
+	public Generator(String dbUrl,String dbUser, String dbPwd ,GeneratorConfig config,
+					 boolean genEntityOnly) {
+
+		this(getDataSource(dbUrl,dbUser, dbPwd) ,new AmbowGenerator(dbUrl, dbUser,dbPwd,
+				config,genEntityOnly),config
 		);
 	}
-	
-	/**
-	 * 构造 Generator，只生成 baseModel
-	 * @param dataSource 数据源
-	 * @param baseModelPackageName base model 包名
-	 * @param baseModelOutputDir base mode 输出目录
-	 */
-	public Generator(DataSource dataSource, String baseModelPackageName, String baseModelOutputDir) {
-		this(dataSource, new BaseModelGenerator(baseModelPackageName, baseModelOutputDir));
+	public static DataSource getDataSource(String url, String user,String pwd) {
+		DruidPlugin druidPlugin = new DruidPlugin(url, user, pwd);
+		druidPlugin.setInitialSize(1).setMinIdle(1).setMaxActive(2000).setTimeBetweenEvictionRunsMillis(5000).setValidationQuery("select 1")
+				.setTimeBetweenEvictionRunsMillis(60000).setMinEvictableIdleTimeMillis(30000).setFilters("stat,wall");
+		druidPlugin.setConnectionProperties("useInformationSchema=true;remarks=true");
+		druidPlugin.start();
+		return druidPlugin.getDataSource();
 	}
-	
-	public Generator(DataSource dataSource, BaseModelGenerator baseModelGenerator) {
-		if (dataSource == null) {
-			throw new IllegalArgumentException("dataSource can not be null.");
-		}
-		if (baseModelGenerator == null) {
-			throw new IllegalArgumentException("baseModelGenerator can not be null.");
-		}
-		
-		this.metaBuilder = new MetaBuilder(dataSource);
-		this.baseModelGenerator = baseModelGenerator;
-		this.mappingKitGenerator = null;
-		this.dataDictionaryGenerator = null;
-	}
-	
-	/**
-	 * 使用指定 BaseModelGenerator、ModelGenerator 构造 Generator 
-	 * 生成 BaseModel、Model、MappingKit 三类文件，其中 MappingKit 输出目录与包名与 Model相同
-	 */
-	public Generator(DataSource dataSource, BaseModelGenerator baseModelGenerator,AmbowGenerator ambowGenerator) {
-		if (dataSource == null) {
-			throw new IllegalArgumentException("dataSource can not be null.");
-		}
-		if (baseModelGenerator == null) {
-			throw new IllegalArgumentException("entity Generator can not be null.");
-		}
 
+
+
+	public Generator(DataSource dataSource, AmbowGenerator ambowGenerator,GeneratorConfig config) {
+		if (dataSource == null) {
+			throw new IllegalArgumentException("dataSource can not be null.");
+		}
+        this.config = config;
+		this.baseModelGenerator = new BaseModelGenerator(config.basePackage + ".entity",config);
 		this.metaBuilder = new MetaBuilder(dataSource);
-		this.baseModelGenerator = baseModelGenerator;
 		this.ambowGenerator = ambowGenerator;
-		this.dataDictionaryGenerator = new DataDictionaryGenerator(dataSource, baseModelGenerator.baseModelOutputDir);
+		this.dataDictionaryGenerator = new DataDictionaryGenerator(dataSource, config.basePackageDir);
 	}
 	
 	/**
