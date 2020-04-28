@@ -290,6 +290,7 @@ public class AmbowGenerator {
 				tableMeta.apiPrefix = "/" + tableMeta.apiPrefix;
 		}
 		data.set("apiPrefix", tableMeta.apiPrefix);
+		data.set("projectName", config.projectName);
 		//data.set("idJavaType", );
 		tableMeta.baseModelContent = engine.getTemplate(feignTemplate).renderToString(data);
 	}

@@ -17,7 +17,7 @@ import java.util.List;
  * @author #(tableMeta.author)
  */
 @Api(tags = "#(tableMeta.remarks)FeignClient")
-@FeignClient(name = "#(firstCharToLowerCase(tableMeta.modelName))")
+@FeignClient(name = "#(projectName)")
 public interface #(tableMeta.modelName)FeignClient {
 
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/page", method = RequestMethod.POST)

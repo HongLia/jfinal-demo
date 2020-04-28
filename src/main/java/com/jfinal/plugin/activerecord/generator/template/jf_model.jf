@@ -32,6 +32,7 @@ public class #(tableMeta.modelName)DTO extends PageInfoExt {
 
     #if(tableMeta.primaryKey == cm.attrName)
     @Id
+    @GeneratedValue(generator = "JDBC")
     #end
     #if (cm.remarks)
     @ApiModelProperty("#(cm.remarks)")
