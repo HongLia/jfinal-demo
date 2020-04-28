@@ -2,6 +2,8 @@ package #(controllerPackageName);
 
 import #(modelPackageName).#(tableMeta.modelName)DTO;
 import #(serviceImport);
+import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
 import com.ambow.common.response.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -57,9 +59,12 @@ public class #(tableMeta.modelName)Controller {
     @RequestMapping(value = "add", method = RequestMethod.POST)
     @ApiOperation(value = "新增数据", httpMethod = "POST")
     public Result add(@RequestBody #(tableMeta.modelName)DTO entity) {
+        #if(stringpk)
+        entity.setId(UUID.fastUUID().toString());
+        #end
         entity.setCreateTime(new Date());
         #(serverImplName).insertSelective(entity);
-        return Result.success();
+        return Result.success(entity);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
@@ -67,7 +72,7 @@ public class #(tableMeta.modelName)Controller {
     public Result update(@RequestBody #(tableMeta.modelName)DTO entity) {
         entity.setUpdateTime(new Date());
         #(serverImplName).updateByPrimaryKeySelective(entity);
-        return Result.success();
+        return Result.success(entity);
     }
 
     @RequestMapping(value = "delete", method = RequestMethod.GET)

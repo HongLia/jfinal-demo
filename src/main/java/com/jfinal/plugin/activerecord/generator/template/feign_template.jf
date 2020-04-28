@@ -38,11 +38,11 @@ public interface #(tableMeta.modelName)FeignClient {
 
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/add", method = RequestMethod.POST)
     @ApiOperation(value = "新增数据", httpMethod = "POST")
-    void add(@RequestBody #(tableMeta.modelName)DTO entity);
+    #(tableMeta.modelName)DTO add(@RequestBody #(tableMeta.modelName)DTO entity);
 
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/update", method = RequestMethod.POST)
     @ApiOperation(value = "修改数据", httpMethod = "POST")
-    void update(@RequestBody #(tableMeta.modelName)DTO entity);
+    #(tableMeta.modelName)DTO update(@RequestBody #(tableMeta.modelName)DTO entity);
 
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/delete", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")

@@ -23,7 +23,7 @@ public class _JFinalDemoGenerator {
 	private static final String projectName = "dict";
 	private static final String port = "30100";
 	private static final String serverName = "字典服务";
-	private static final String outPath = "E:/gen";
+	private static final String outPath = "E:/gen2";
 
 	// 生成tables 空为全部生成
 	private static final String[] tables = {"dict_application"};

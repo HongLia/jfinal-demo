@@ -272,6 +272,7 @@ public class AmbowGenerator {
 		data.set("serviceName","I".concat(tableMeta.modelName).concat("Service"));
 		data.set("modelPackageName",modelPackageName);
 		data.set("serviceImport",servicePackageName + ".I" + tableMeta.modelName + "Service");
+		data.set("stringpk","java.lang.String".equals(tableMeta.primaryKeyJavaType));
 		if(StringUtils.hasText(tableMeta.apiPrefix)){
 			if(!tableMeta.apiPrefix.startsWith("/"))
 				tableMeta.apiPrefix = "/" + tableMeta.apiPrefix;
@@ -322,6 +323,7 @@ public class AmbowGenerator {
 		data.set("serviceImplName",tableMeta.modelName + "ServiceImpl");
 		data.set("serviceName","I" + tableMeta.modelName + "Service");
 		data.set("feignPackageName",feignPackageName);
+		data.set("stringpk","java.lang.String".equals(tableMeta.primaryKeyJavaType));
 		tableMeta.baseModelContent = engine.getTemplate(feignImplTemplate).renderToString(data);
 	}
 
