@@ -50,10 +50,10 @@ public class Generator {
 
 
 	public Generator(String dbUrl,String dbUser, String dbPwd ,GeneratorConfig config,
-					 boolean genEntityOnly) {
+					 boolean genFirst) {
 
 		this(getDataSource(dbUrl,dbUser, dbPwd) ,new AmbowGenerator(dbUrl, dbUser,dbPwd,
-				config,genEntityOnly),config
+				config,genFirst),config
 		);
 	}
 	public static DataSource getDataSource(String url, String user,String pwd) {

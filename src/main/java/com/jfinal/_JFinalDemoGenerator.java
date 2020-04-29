@@ -13,17 +13,17 @@ import javax.sql.DataSource;
  */
 public class _JFinalDemoGenerator {
 
-	private static final String url = "jdbc:mysql://mysql:3306/ambow_dict?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
-	private static final String user = "ambow_dict";
-	private static final String pwd = "JHHVGESsmNNBpUjN";
-	// 是否只生成entity
-	private static final boolean genEntityOnly = false;
+	private static final String url = "jdbc:mysql://mysql:3306/ambow_order?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
+	private static final String user = "ambow_order";
+	private static final String pwd = "Ne6OFeThTQmh3hYR";
+	// 是否第一次生成,第一次生成项目需要的全部文件
+	private static final boolean genFirst = true;
 
 	private static final String author = "ghy";
 	private static final String apiPrefix = "/api/v2";
-	private static final String projectName = "dict";
-	private static final String port = "30100";
-	private static final String serverName = "字典服务";
+	private static final String projectName = "order";
+	private static final String port = "30000";
+	private static final String serverName = "订单服务";
 	private static final String outPath = "E:/gen";
 
 	// 生成tables 空为全部生成
@@ -34,7 +34,7 @@ public class _JFinalDemoGenerator {
 		GeneratorConfig config = new GeneratorConfig(projectName,port,author,serverName,outPath);
 
 		// 创建生成器
-		Generator generator = new Generator(url, user, pwd, config, genEntityOnly);
+		Generator generator = new Generator(url, user, pwd, config, genFirst);
 
 		// 配置是否生成备注
 		generator.setGenerateRemarks(true);

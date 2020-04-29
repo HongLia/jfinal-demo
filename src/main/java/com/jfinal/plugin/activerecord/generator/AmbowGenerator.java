@@ -86,7 +86,7 @@ public class AmbowGenerator {
 
 	protected JavaKeyword javaKeyword = JavaKeyword.me;
 
-	protected boolean genEntityOnly = false;
+	protected boolean genFirst = false;
 
 	/**
 	 * 针对 Model 中七种可以自动转换类型的 getter 方法，调用其具有确定类型返回值的 getter 方法
@@ -106,7 +106,7 @@ public class AmbowGenerator {
 	}};
 
 
-	public AmbowGenerator(String dbUrl,String dbUser,String dbPwd,GeneratorConfig config,boolean genEntityOnly) {
+	public AmbowGenerator(String dbUrl,String dbUser,String dbPwd,GeneratorConfig config,boolean genFirst) {
 
 		if (StrKit.isBlank(config.getBasePackage())) {
 			throw new IllegalArgumentException("baseModelPackageName can not be blank.");
@@ -132,7 +132,7 @@ public class AmbowGenerator {
 		this.serviceImplOutputDir = config.rpcDir + "/src/main/java/" + config.basePackageDir + "/service/impl";
         this.mapperOutputDir = config.rpcDir + "/src/main/java/" + config.basePackageDir + "/mapper";
 		this.resourceDir = config.rpcDir + "/src/main/resources/";
-		this.genEntityOnly = genEntityOnly;
+		this.genFirst = genFirst;
 		initEngine();
 	}
 	
@@ -153,7 +153,7 @@ public class AmbowGenerator {
 		System.out.println("Generate controller & service ...");
 		this.modelPackageName = modelPackageName;
 
-		if(!genEntityOnly){
+
 			for (TableMeta tableMeta : tableMetas) {
 				genControllerContent(tableMeta);
 			}
@@ -163,9 +163,8 @@ public class AmbowGenerator {
 				genFeignContent(tableMeta);
 			}
 			writeToFileNotRep(tableMetas,feignOutputDir,"","FeignClient");
-		}
 
-		if(!genEntityOnly){
+
 			for (TableMeta tableMeta : tableMetas) {
 				genServiceContent(tableMeta);
 			}
@@ -190,8 +189,9 @@ public class AmbowGenerator {
 				genMapperXmlContent(tableMeta);
 			}
 			writeToFileNotRep(tableMetas,resourceDir + "mapper/","","Mapper.xml");
-			genOther(tableMetas.get(0));
-		}
+			if(genFirst)
+				genOther(tableMetas.get(0));
+
 	}
 
 	private void genOther(TableMeta tableMeta) {
