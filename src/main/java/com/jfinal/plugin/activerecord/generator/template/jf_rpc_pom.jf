@@ -147,15 +147,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <!--  new -->
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper</artifactId>
-                <version>5.1.2</version>
-            </dependency>
-
-
-
             <dependency>
                 <groupId>com.jfinal</groupId>
                 <artifactId>jfinal-saas</artifactId>
@@ -163,6 +154,7 @@
                 <scope>test</scope>
             </dependency>
 
+            <!--  new -->
             <dependency>
                 <groupId>com.ambow</groupId>
                 <artifactId>common</artifactId>
@@ -192,14 +184,6 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>1.2.12</version>
             </dependency>
-
-            <dependency>
-                <groupId>com.jfinal</groupId>
-                <artifactId>jfinal-saas</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <scope>test</scope>
-            </dependency>
-
         </dependencies>
 
         <dependencyManagement>
