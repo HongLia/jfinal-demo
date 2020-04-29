@@ -40,7 +40,7 @@ public class SwaggerConfig {
 
 	private ApiInfo apiInfo() {
 
-		return new ApiInfoBuilder().title("#(servierName)接口").description("RESTful API")
+		return new ApiInfoBuilder().title("#(serverName)接口").description("RESTful API")
 				.termsOfServiceUrl("http://localhost:31000")
 				.contact(new Contact("Ambow", "https://git.ambow.com", "admin@ambow.com")).version("1.0")
 				.build();

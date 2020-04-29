@@ -26,6 +26,8 @@ import java.sql.Types;
 import java.util.*;
 import java.util.function.Predicate;
 import javax.sql.DataSource;
+
+import cn.hutool.core.collection.CollectionUtil;
 import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.dialect.Dialect;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
@@ -99,7 +101,7 @@ public class MetaBuilder {
 			List<TableMeta> ret = new ArrayList<TableMeta>();
 			buildTableNames(ret);
 			for (TableMeta tableMeta : ret) {
-				if(null != this.generatorTables)
+				if(CollectionUtil.isNotEmpty(this.generatorTables))
 					if(!this.generatorTables.contains(tableMeta.name))
 						continue;
 				System.out.println("*****************************" + tableMeta.name + "*****************************");

@@ -18,7 +18,7 @@ import java.util.Date;
  *
  * @author #(tableMeta.author)
  */
-@Api(tags = "#(tableMeta.remarks)")
+@Api(tags = "#(tableMeta.remarks)Rest")
 @RestController
 @RequestMapping("#(firstCharToLowerCase(tableMeta.modelName))")
 public class #(tableMeta.modelName)Controller {

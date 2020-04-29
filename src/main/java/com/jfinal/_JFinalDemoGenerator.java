@@ -18,15 +18,16 @@ public class _JFinalDemoGenerator {
 	private static final String pwd = "JHHVGESsmNNBpUjN";
 	// 是否只生成entity
 	private static final boolean genEntityOnly = false;
+
 	private static final String author = "ghy";
 	private static final String apiPrefix = "/api/v2";
 	private static final String projectName = "dict";
 	private static final String port = "30100";
 	private static final String serverName = "字典服务";
-	private static final String outPath = "E:/gen2";
+	private static final String outPath = "E:/gen";
 
 	// 生成tables 空为全部生成
-	private static final String[] tables = {"dict_application"};
+	private static final String[] tables = {};
 
 
 	public static void main(String[] args) {
