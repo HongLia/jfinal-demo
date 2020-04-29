@@ -75,7 +75,7 @@ public class Generator {
 		this.baseModelGenerator = new BaseModelGenerator(config.basePackage + ".entity",config);
 		this.metaBuilder = new MetaBuilder(dataSource);
 		this.ambowGenerator = ambowGenerator;
-		this.dataDictionaryGenerator = new DataDictionaryGenerator(dataSource, config.basePackageDir);
+		this.dataDictionaryGenerator = new DataDictionaryGenerator(dataSource, config.modelDir + "/src/main/java/" + config.basePackageDir);
 	}
 	
 	/**
