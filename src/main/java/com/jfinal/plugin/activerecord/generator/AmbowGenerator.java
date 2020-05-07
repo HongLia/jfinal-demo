@@ -153,7 +153,6 @@ public class AmbowGenerator {
 		System.out.println("Generate controller & service ...");
 		this.modelPackageName = modelPackageName;
 
-
 			for (TableMeta tableMeta : tableMetas) {
 				genControllerContent(tableMeta);
 			}
@@ -277,7 +276,7 @@ public class AmbowGenerator {
 			if(!tableMeta.apiPrefix.startsWith("/"))
 				tableMeta.apiPrefix = "/" + tableMeta.apiPrefix;
 		}
-		data.set("apiPrefix", tableMeta.apiPrefix);
+		data.set("apiPrefix", tableMeta.apiPrefix.replace("api","rest"));
 		//data.set("idJavaType", );
 		tableMeta.baseModelContent = engine.getTemplate(controllerTemplate).renderToString(data);
 	}
