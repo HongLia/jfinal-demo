@@ -23,9 +23,6 @@ import java.util.Date;
 @RequestMapping("#(firstCharToLowerCase(tableMeta.modelName))")
 public class #(tableMeta.modelName)Controller {
 
-    #set(serverImplName = firstCharToLowerCase(tableMeta.modelName) + 'Service')
-	private static final Logger logger = LoggerFactory.getLogger(#(tableMeta.modelName)Controller.class);
-
     /**
      * 服务对象
      */
