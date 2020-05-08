@@ -62,7 +62,7 @@ public class AmbowGenerator {
 
 	protected String mainTemplate = "/com/jfinal/plugin/activerecord/generator/template/application.jf";
 
-
+	protected String webconfigTemplate = "/com/jfinal/plugin/activerecord/generator/template/webconfig.jf";
 
 	private String controllerPackageName;
 	private String feignPackageName;
@@ -216,6 +216,10 @@ public class AmbowGenerator {
 			writeToFileNotRep(config.rpcDir + configDir,"SwaggerConfig.java", tableMeta.baseModelContent);
 
 
+			genConfigContent(tableMeta, webconfigTemplate);
+			writeToFileNotRep(config.rpcDir + configDir,"WebConfig.java", tableMeta.baseModelContent);
+
+
             genPomContent(tableMeta, proTemplate);
             writeToFileNotRep(config.baseDir,"pom.xml", tableMeta.baseModelContent);
 
@@ -232,7 +236,7 @@ public class AmbowGenerator {
 			writeToFileNotRep(config.rpcDir,".gitignore",config.igno);
 
 			genPomContent(tableMeta, jenkinsfileTemplate);
-			writeToFileNotRep(config.rpcDir,"jenkinsfile", tableMeta.baseModelContent);
+			writeToFileNotRep(config.rpcDir,"Jenkinsfile", tableMeta.baseModelContent);
 
 			genPomContent(tableMeta, applicationTemplate);
 			writeToFileNotRep(resourceDir,"application.yml", tableMeta.baseModelContent);
