@@ -22,7 +22,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("#(firstCharToLowerCase(tableMeta.modelName))")
 public class #(tableMeta.modelName)Controller {
-
+    #set(serverImplName = firstCharToLowerCase(tableMeta.modelName) + 'Service')
     /**
      * 服务对象
      */

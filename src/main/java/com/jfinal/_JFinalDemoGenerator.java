@@ -23,7 +23,7 @@ public class _JFinalDemoGenerator {
 	private static final String apiPrefix = "/api/v2";
 	private static final String projectName = "order";
 	private static final String port = "30000";
-	private static final String serverName = "统计服务";
+	private static final String serverName = "订单服务";
 	private static final String outPath = "E:/gen";
 
 	// 生成tables 空为全部生成
