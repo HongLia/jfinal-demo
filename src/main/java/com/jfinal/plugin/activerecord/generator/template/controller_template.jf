@@ -4,7 +4,7 @@ import #(modelPackageName).#(tableMeta.modelName)DTO;
 import #(serviceImport);
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
-import com.ambow.common.response.Result;
+import com.ambow.common.response.ResultData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -31,52 +31,52 @@ public class #(tableMeta.modelName)Controller {
 
     @RequestMapping(value = "#(apiPrefix)/page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询", httpMethod = "POST")
-    public Result page(@RequestBody #(tableMeta.modelName)DTO entity) {
+    public ResultData page(@RequestBody #(tableMeta.modelName)DTO entity) {
         return #(serverImplName).show(entity, entity.getPageSize(), entity.getCurrentPage());
     }
 
     @RequestMapping(value = "#(apiPrefix)/list", method = RequestMethod.POST)
     @ApiOperation(value = "列表查询", httpMethod = "POST")
-    public Result list(@RequestBody #(tableMeta.modelName)DTO entity) {
-        return Result.success(#(serverImplName).select(entity));
+    public ResultData list(@RequestBody #(tableMeta.modelName)DTO entity) {
+        return ResultData.buildSuccess(#(serverImplName).select(entity));
     }
 
     @RequestMapping(value = "#(apiPrefix)/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "根据id查询详细信息", httpMethod = "GET")
-    public Result queryById(@PathVariable("id") #(tableMeta.primaryKeyJavaType) id) {
-        return Result.success(#(serverImplName).selectByPrimaryKey(id));
+    public ResultData queryById(@PathVariable("id") #(tableMeta.primaryKeyJavaType) id) {
+        return ResultData.buildSuccess(#(serverImplName).selectByPrimaryKey(id));
     }
 
     @RequestMapping(value = "#(apiPrefix)/listByIds", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids查询", httpMethod = "GET")
-    public Result listByIds(@RequestParam(value = "ids", required = true) String ids) {
-        return Result.success(#(serverImplName).selectByIds(ids));
+    public ResultData listByIds(@RequestParam(value = "ids", required = true) String ids) {
+        return ResultData.buildSuccess(#(serverImplName).selectByIds(ids));
     }
 
     @RequestMapping(value = "#(apiPrefix)/add", method = RequestMethod.POST)
     @ApiOperation(value = "新增数据", httpMethod = "POST")
-    public Result add(@RequestBody #(tableMeta.modelName)DTO entity) {
+    public ResultData add(@RequestBody #(tableMeta.modelName)DTO entity) {
         #if(stringpk)
         entity.setId(UUID.fastUUID().toString());
         #end
         entity.setCreateTime(new Date());
         #(serverImplName).insertSelective(entity);
-        return Result.success(entity);
+        return ResultData.buildSuccess(entity);
     }
 
     @RequestMapping(value = "#(apiPrefix)/update", method = RequestMethod.POST)
     @ApiOperation(value = "修改数据", httpMethod = "POST")
-    public Result update(@RequestBody #(tableMeta.modelName)DTO entity) {
+    public ResultData update(@RequestBody #(tableMeta.modelName)DTO entity) {
         entity.setUpdateTime(new Date());
         #(serverImplName).updateByPrimaryKeySelective(entity);
-        return Result.success(entity);
+        return ResultData.buildSuccess(entity);
     }
 
     @RequestMapping(value = "#(apiPrefix)/delete", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")
-    public Result delete(@RequestParam(value = "ids", required = true) String ids) {
+    public ResultData delete(@RequestParam(value = "ids", required = true) String ids) {
         #(serverImplName).deleteByIds(ids);
-        return Result.success();
+        return ResultData.buildSuccess();
     }
 
 }

@@ -13,17 +13,17 @@ import javax.sql.DataSource;
  */
 public class _JFinalDemoGenerator {
 
-	private static final String url = "jdbc:mysql://mysql:3306/ambow_teacher?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
-	private static final String user = "ambow_teacher";
-	private static final String pwd = "FC487D18982A008B94B8";
+	private static final String url = "jdbc:mysql://mysql:3306/ambow_resource?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
+	private static final String user = "ambow_resource";
+	private static final String pwd = "JZ288Rfcj4TeIcQe";
 	// 是否第一次生成,第一次生成项目需要的全部文件
 	private static final boolean genFirst = true;
 
 	private static final String author = "ghy";
 	private static final String apiPrefix = "/api/v2";
-	private static final String projectName = "teacher";
+	private static final String projectName = "resource";
 	private static final String port = "30000";
-	private static final String serverName = "教师服务";
+	private static final String serverName = "资源服务";
 	private static final String outPath = "E:/gen";
 
 	// 生成tables 空为全部生成
