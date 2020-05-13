@@ -4,10 +4,7 @@ import #(modelPackageName).#(tableMeta.modelName)DTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import com.github.pagehelper.PageInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -17,7 +14,7 @@ import java.util.List;
  * @author #(tableMeta.author)
  */
 @Api(tags = "#(tableMeta.remarks)FeignClient")
-@FeignClient(name = "#(tableMeta.modelName)", path = "#(projectName)")
+@FeignClient(name = "#(tableMeta.modelName)")
 public interface #(tableMeta.modelName)FeignClient {
 
     @RequestMapping(value = "#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/page", method = RequestMethod.POST)

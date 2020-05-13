@@ -28,7 +28,7 @@ config.put('MIN_CPU', '10')
 // 电子邮件，构建失败会发送邮件通知
 config.put('MAIL', 'haoyue.ge@ambow.com')
 // 打包
-config.put('DEPENDENCY_PATH', ["#(projectName)-irpc", "#(projectName)-model"])
+config.put('DEPENDENCY_PATH', ["#(projectName)-model", "#(projectName)-irpc"])
 
 // 传参运行构建函数
 build(config)
