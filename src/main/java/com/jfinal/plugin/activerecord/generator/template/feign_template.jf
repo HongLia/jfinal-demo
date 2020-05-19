@@ -31,7 +31,7 @@ public interface #(tableMeta.modelName)FeignClient {
 
     @RequestMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/listByIds", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids查询", httpMethod = "GET")
-    List<#(tableMeta.modelName)DTO> listByIds(@RequestParam(value = "ids", required = true) String ids);
+    List<#(tableMeta.modelName)DTO> listByIds(@RequestParam(value = "ids") String ids);
 
     @RequestMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/add", method = RequestMethod.POST)
     @ApiOperation(value = "新增数据", httpMethod = "POST")
@@ -43,5 +43,5 @@ public interface #(tableMeta.modelName)FeignClient {
 
     @RequestMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/delete", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")
-    void delete(@RequestParam(value = "ids", required = true) String ids);
+    void delete(@RequestParam(value = "ids") String ids);
 }

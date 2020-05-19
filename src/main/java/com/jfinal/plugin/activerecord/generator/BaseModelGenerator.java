@@ -38,7 +38,7 @@ public class BaseModelGenerator {
 	protected String baseModelPackageName;
 	protected String baseModelOutputDir;
 	protected boolean generateChainSetter = false;
-	
+	private boolean genModelColunmsName;
 	protected JavaKeyword javaKeyword = JavaKeyword.me;
 	
 
@@ -75,10 +75,10 @@ public class BaseModelGenerator {
 		this.generateChainSetter = generateChainSetter;
 	}
 	
-	public void generate(List<TableMeta> tableMetas) {
+	public void generate(List<TableMeta> tableMetas, boolean genModelColunmsName) {
 		System.out.println("Generate base model ...");
 		System.out.println("Base Model Output Dir: " + baseModelOutputDir);
-		
+		this.genModelColunmsName = genModelColunmsName;
 		for (TableMeta tableMeta : tableMetas) {
 			genBaseModelContent(tableMeta);
 		}
@@ -89,7 +89,7 @@ public class BaseModelGenerator {
 		Kv data = Kv.by("baseModelPackageName", baseModelPackageName);
 		data.set("generateChainSetter", generateChainSetter);
 		data.set("tableMeta", tableMeta);
-		
+		data.set("genModelColunmsName", genModelColunmsName);
 		tableMeta.baseModelContent = engine.getTemplate(template).renderToString(data);
 	}
 	

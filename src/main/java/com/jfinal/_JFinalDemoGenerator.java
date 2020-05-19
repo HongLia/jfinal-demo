@@ -10,20 +10,26 @@ import javax.sql.DataSource;
 
 /**
  * 代码生成demo
+ *  找不到包引入
+ * 	<groupId>com.jfinal</groupId>
+ * 	<artifactId>jfinal-saas</artifactId>
+ * 	<version>1.0-SNAPSHOT</version>
  */
 public class _JFinalDemoGenerator {
 
-	private static final String url = "jdbc:mysql://mysql:3306/ambow_resource?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
-	private static final String user = "ambow_resource";
-	private static final String pwd = "JZ288Rfcj4TeIcQe";
+	private static final String url = "jdbc:mysql://localhost:3306/ambow_seller?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
+	private static final String user = "root";
+	private static final String pwd = "111111";
 	// 是否第一次生成,第一次生成项目需要的全部文件
 	private static final boolean genFirst = true;
 
+	// 是否生成数据库字段名常量
+	private static final boolean genModelColunmsName = true;
 	private static final String author = "ghy";
 	private static final String apiPrefix = "/api/v2";
-	private static final String projectName = "resource";
+	private static final String projectName = "seller";
 	private static final String port = "30000";
-	private static final String serverName = "资源服务";
+	private static final String serverName = "订单服务";
 	private static final String outPath = "E:/gen";
 
 	// 生成tables 空为全部生成
@@ -34,7 +40,7 @@ public class _JFinalDemoGenerator {
 		GeneratorConfig config = new GeneratorConfig(projectName,port,author,serverName,outPath);
 
 		// 创建生成器
-		Generator generator = new Generator(url, user, pwd, config, genFirst);
+		Generator generator = new Generator(url, user, pwd, config, genFirst, genModelColunmsName);
 
 		// 配置是否生成备注
 		generator.setGenerateRemarks(true);
@@ -58,7 +64,7 @@ public class _JFinalDemoGenerator {
 		
 		// 设置需要被移除的表名前缀用于生成modelName。例如表名 "osc_user"，移除前缀 "osc_"后生成的model名为 "User"而非 OscUser
 		generator.setRemovedTableNamePrefixes("t_");
-		
+
 		// 生成
 		generator.generate();
 	}

@@ -48,12 +48,17 @@ public class Generator {
 
 	private String apiPrefix;
 
+	/**
+	 * 是否生成字段名常量
+	 */
+	private boolean genModelColunmsName;
+
 
 	public Generator(String dbUrl,String dbUser, String dbPwd ,GeneratorConfig config,
-					 boolean genFirst) {
+					 boolean genFirst, boolean genModelColunmsName) {
 
 		this(getDataSource(dbUrl,dbUser, dbPwd) ,new AmbowGenerator(dbUrl, dbUser,dbPwd,
-				config,genFirst),config
+				config,genFirst),config, genModelColunmsName
 		);
 	}
 	public static DataSource getDataSource(String url, String user,String pwd) {
@@ -67,10 +72,11 @@ public class Generator {
 
 
 
-	public Generator(DataSource dataSource, AmbowGenerator ambowGenerator,GeneratorConfig config) {
+	public Generator(DataSource dataSource, AmbowGenerator ambowGenerator,GeneratorConfig config, boolean genModelColunmsName) {
 		if (dataSource == null) {
 			throw new IllegalArgumentException("dataSource can not be null.");
 		}
+		this.genModelColunmsName = genModelColunmsName;
         this.config = config;
 		this.baseModelGenerator = new BaseModelGenerator(config.basePackage + ".entity",config);
 		this.metaBuilder = new MetaBuilder(dataSource);
@@ -244,7 +250,7 @@ public class Generator {
 			return ;
 		}
 
-		baseModelGenerator.generate(tableMetas);
+		baseModelGenerator.generate(tableMetas, genModelColunmsName);
 
 		//生成controller service serviceimpl
 

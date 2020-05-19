@@ -46,4 +46,13 @@ public class #(tableMeta.modelName)DTO extends PageInfoExt {
 
 #end
 
+
+
+#if(genModelColunmsName)
+#for(cm : tableMeta.columnMetas)
+
+    public static final String #(cm.name.toUpperCase()) = "#(cm.name)";
+#end
+#end
+
 }
