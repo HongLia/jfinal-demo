@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ambow.common.enums.BooleanEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Date;
@@ -30,6 +31,9 @@ public class #(tableMeta.modelName)FeignClientImpl implements #(tableMeta.modelN
 
     @Override
     public PageInfo<#(tableMeta.modelName)DTO> page(#(tableMeta.modelName)DTO entity){
+        #if(tableMeta.hasDeleteStatus())
+        entity.setDeleteStatus(BooleanEnum.FALSE.intValue());
+        #end
         PageHelper.startPage(entity.getCurrentPage(), entity.getPageSize());
         List<#(tableMeta.modelName)DTO> tList = #(serverImplName).select(entity);
         return new PageInfo(tList);
@@ -37,6 +41,9 @@ public class #(tableMeta.modelName)FeignClientImpl implements #(tableMeta.modelN
 
     @Override
     public List<#(tableMeta.modelName)DTO> list(#(tableMeta.modelName)DTO entity){
+        #if(tableMeta.hasDeleteStatus())
+        entity.setDeleteStatus(BooleanEnum.FALSE.intValue());
+        #end
         return #(serverImplName).select(entity);
     }
 
@@ -70,6 +77,11 @@ public class #(tableMeta.modelName)FeignClientImpl implements #(tableMeta.modelN
     @Override
     public void delete(String ids){
         #(serverImplName).deleteByIds(ids);
+    }
+
+    @Override
+    public void logicDelete(String ids){
+        #(serverImplName).logicDelete(ids);
     }
 
 }

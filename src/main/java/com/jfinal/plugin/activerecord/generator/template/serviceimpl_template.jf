@@ -7,7 +7,11 @@ import com.ambow.common.mybatis.base.dao.BaseMapper;
 import com.ambow.common.mybatis.base.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-
+#if(tableMeta.hasDeleteStatus())
+import com.ambow.common.enums.BooleanEnum;
+import com.ambow.utils.ListUtil;
+import tk.mybatis.mapper.entity.Example;
+#end
 
 @Service
 public class #(serviceImplName) extends BaseServiceImpl<#(tableMeta.modelName)DTO, String> implements #(serviceName) {
@@ -18,6 +22,18 @@ public class #(serviceImplName) extends BaseServiceImpl<#(tableMeta.modelName)DT
     @Override
     public BaseMapper<#(tableMeta.modelName)DTO, String> getMappser() {
         return mapper;
+    }
+
+
+    @Override
+    public void logicDelete(String ids){
+        #if(tableMeta.hasDeleteStatus())
+        #(tableMeta.modelName)DTO updateBean = new #(tableMeta.modelName)DTO();
+        updateBean.setDeleteStatus(BooleanEnum.TRUE.intValue());
+        Example example = new Example(#(tableMeta.modelName)DTO.class);
+        example.createCriteria().andIn("deleteStatus", ListUtil.getListByStr(ids));
+        mapper.updateByExampleSelective(updateBean, example);
+        #end
     }
 
 }

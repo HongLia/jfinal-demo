@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Date;
+import com.ambow.common.response.Result;
 
 /**
  * #(tableMeta.remarks)控制层
@@ -31,7 +32,7 @@ public class #(tableMeta.modelName)Controller {
 
     @RequestMapping(value = "#(apiPrefix)/page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询", httpMethod = "POST")
-    public ResultData page(@RequestBody #(tableMeta.modelName)DTO entity) {
+    public Result page(@RequestBody #(tableMeta.modelName)DTO entity) {
         return #(serverImplName).show(entity, entity.getPageSize(), entity.getCurrentPage());
     }
 
@@ -75,6 +76,13 @@ public class #(tableMeta.modelName)Controller {
     @RequestMapping(value = "#(apiPrefix)/delete", method = RequestMethod.GET)
     @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")
     public ResultData delete(@RequestParam(value = "ids", required = true) String ids) {
+        #(serverImplName).deleteByIds(ids);
+        return ResultData.buildSuccess();
+    }
+
+    @RequestMapping(value = "#(apiPrefix)/logicDelete", method = RequestMethod.GET)
+    @ApiOperation(value = "根据ids逻辑删除数据", httpMethod = "GET")
+    public ResultData logicDelete(@RequestParam(value = "ids", required = true) String ids) {
         #(serverImplName).deleteByIds(ids);
         return ResultData.buildSuccess();
     }

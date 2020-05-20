@@ -38,10 +38,16 @@ public interface #(tableMeta.modelName)FeignClient {
     #(tableMeta.modelName)DTO add(@RequestBody #(tableMeta.modelName)DTO entity);
 
     @RequestMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/update", method = RequestMethod.POST)
+    @PostMapping(value = "/seller/api/v1/submitShopSellerApplyForYz")
     @ApiOperation(value = "修改数据", httpMethod = "POST")
     #(tableMeta.modelName)DTO update(@RequestBody #(tableMeta.modelName)DTO entity);
 
-    @RequestMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/delete", method = RequestMethod.GET)
+    @GetMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/delete")
     @ApiOperation(value = "根据ids删除数据", httpMethod = "GET")
     void delete(@RequestParam(value = "ids") String ids);
+
+    @GetMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/logicDelete")
+    @ApiOperation(value = "根据ids逻辑删除数据", httpMethod = "GET")
+    void logicDelete(@RequestParam(value = "ids") String ids);
+
 }

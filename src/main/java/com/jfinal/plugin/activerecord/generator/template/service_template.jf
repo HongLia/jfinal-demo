@@ -5,4 +5,10 @@ import com.ambow.common.mybatis.base.service.BaseService;
 
 public interface I#(tableMeta.modelName)Service extends BaseService<#(tableMeta.modelName)DTO, String> {
 
+
+   /**
+    * 逻辑删除
+    * @param ids
+    */
+    void logicDelete(String ids);
 }

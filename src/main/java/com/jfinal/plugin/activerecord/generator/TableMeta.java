@@ -47,7 +47,14 @@ public class TableMeta implements Serializable {
 	public int colDefaultValueMaxLen = "Default".length();	// 字段默认值最大宽度，用于辅助生成字典文件样式
 	public String author = "auto";
 
+
 	public String apiPrefix = "";
+
+	public boolean hasDeleteStatus(){
+		long count = columnMetas.stream().filter(cm -> { return cm.name.equals("delete_status");}).count();
+		return count > 0;
+	}
+
 }
 
 

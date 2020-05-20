@@ -1,12 +1,8 @@
 package com.jfinal;
 
-import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.activerecord.generator.Generator;
 import com.jfinal.plugin.activerecord.generator.GeneratorConfig;
-import com.jfinal.plugin.druid.DruidPlugin;
-
-import javax.sql.DataSource;
 
 /**
  * 代码生成demo
