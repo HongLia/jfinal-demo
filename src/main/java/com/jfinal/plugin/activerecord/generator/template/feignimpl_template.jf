@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ambow.common.enums.BooleanEnum;
+import com.ambow.common.page.PageIdsModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.Date;
@@ -55,6 +56,13 @@ public class #(tableMeta.modelName)FeignClientImpl implements #(tableMeta.modelN
     @Override
     public List<#(tableMeta.modelName)DTO> listByIds(String ids){
         return #(serverImplName).selectByIds(ids);
+    }
+
+    @Override
+    public PageInfo<#(tableMeta.modelName)DTO> pageByIds(PageIdsModel pageIdsModel) {
+        PageHelper.startPage(pageIdsModel.getCurrentPage(), pageIdsModel.getPageSize());
+        List<#(tableMeta.modelName)DTO> tList = #(serverImplName).selectByIds(pageIdsModel.getIds());
+        return new PageInfo(tList);
     }
 
     @Override

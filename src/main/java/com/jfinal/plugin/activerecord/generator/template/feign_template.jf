@@ -1,6 +1,7 @@
 package #(feignPackageName);
 
 import #(modelPackageName).#(tableMeta.modelName)DTO;
+import com.ambow.common.page.PageIdsModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import com.github.pagehelper.PageInfo;
@@ -32,6 +33,10 @@ public interface #(tableMeta.modelName)FeignClient {
     @GetMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/listByIds")
     @ApiOperation(value = "根据ids查询", httpMethod = "GET")
     List<#(tableMeta.modelName)DTO> listByIds(@RequestParam(value = "ids") String ids);
+
+    @PostMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/pageByIds")
+    @ApiOperation(value = "根据ids分页查询", httpMethod = "POST")
+    PageInfo<OrderDTO> pageByIds(@RequestBody PageIdsModel ids);
 
     @PostMapping(value = "/#(firstCharToLowerCase(tableMeta.modelName))#(apiPrefix)/add")
     @ApiOperation(value = "新增数据", httpMethod = "POST")
