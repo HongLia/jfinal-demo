@@ -5,6 +5,9 @@ import #(serviceImport);
 import #(feignPackageName).#(tableMeta.modelName)FeignClient;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import com.ambow.common.mybatis.base.ExampleUtils;
+import com.ambow.utils.ListUtil;
+import tk.mybatis.mapper.entity.Example;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import com.github.pagehelper.PageHelper;
@@ -59,9 +62,11 @@ public class #(tableMeta.modelName)FeignClientImpl implements #(tableMeta.modelN
     }
 
     @Override
-    public PageInfo<#(tableMeta.modelName)DTO> pageByIds(PageIdsModel pageIdsModel) {
-        PageHelper.startPage(pageIdsModel.getCurrentPage(), pageIdsModel.getPageSize());
-        List<#(tableMeta.modelName)DTO> tList = #(serverImplName).selectByIds(pageIdsModel.getIds());
+    public PageInfo<#(tableMeta.modelName)DTO> pageByIds(#(tableMeta.modelName)DTO dto) {
+        Example example = ExampleUtils.builder(dto);
+        example.and().andIn("id", ListUtil.getListByStr(dto.getIds()));
+        PageHelper.startPage(dto.getCurrentPage(), dto.getPageSize());
+        List<#(tableMeta.modelName)DTO> tList = orderService.selectByExample(example);
         return new PageInfo(tList);
     }
 
