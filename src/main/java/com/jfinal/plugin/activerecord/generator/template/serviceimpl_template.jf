@@ -33,6 +33,8 @@ public class #(serviceImplName) extends BaseServiceImpl<#(tableMeta.modelName)DT
         Example example = new Example(#(tableMeta.modelName)DTO.class);
         example.createCriteria().andIn("deleteStatus", ListUtil.getListByStr(ids));
         mapper.updateByExampleSelective(updateBean, example);
+        #else
+        // TODO 没有delete_status字段，逻辑删除代码手写
         #end
     }
 
