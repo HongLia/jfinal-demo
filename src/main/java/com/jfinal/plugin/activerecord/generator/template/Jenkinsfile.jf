@@ -20,7 +20,7 @@ config.put('NAMESPACE', 'base-service')
 // Kubernetes Pod 最大内存限制，单位 MiB
 config.put('MAX_MEM', '1024')
 // Kubernetes Pod 最小内存资源请求
-config.put('MIN_MEM', '128')
+config.put('MIN_MEM', '512')
 // Kubernetes Pod 最大 CPU 限制，单位 m，1000m 等于 1 核
 config.put('MAX_CPU', '2000')
 // Kubernetes Pod 最小 CPU 资源请求
