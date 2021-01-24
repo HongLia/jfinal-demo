@@ -13,19 +13,23 @@ import com.jfinal.plugin.activerecord.generator.GeneratorConfig;
  */
 public class _JFinalDemoGenerator {
 
-	private static final String url = "jdbc:mysql://localhost:3306/ambow_seller?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
+	private static final String url = "jdbc:mysql://localhost:3306/zhl_test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai";
 	private static final String user = "root";
-	private static final String pwd = "111111";
+	private static final String pwd = "root";
 	// 是否第一次生成,第一次生成项目需要的全部文件
 	private static final boolean genFirst = true;
 
 	// 是否生成数据库字段名常量
 	private static final boolean genModelColunmsName = true;
-	private static final String author = "ghy";
+	//作者名称
+	private static final String author = "hongliang";
 	private static final String apiPrefix = "/api/v2";
-	private static final String projectName = "seller";
+	//项目抿成
+	private static final String projectName = "MyProject";
 	private static final String port = "30000";
+	//项目中文名称
 	private static final String serverName = "订单服务";
+	//文件输出路径
 	private static final String outPath = "E:/gen";
 
 	// 生成tables 空为全部生成
